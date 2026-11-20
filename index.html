@@ -1,0 +1,1337 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Asset Delivery Help Desk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: brand header → ask → answer → reference blocks (errors full width, then timelines + contacts side by side). Light, single theme by choice. */
+:root {
+  color-scheme: light;
+  --bg: #e7eae4;
+  --surface: #f4f5f1;
+  --sunk: #e6e9e2;
+  --ink: #1c2a22;
+  --muted: #59655d;
+  --line: #d2d8cd;
+  --accent: #23573d;
+  --accent-ink: #ffffff;
+  --accent-soft: #dce7d8;
+  --brand: #15281e;
+  --brand-ink: #eef3ea;
+  --brand-muted: #b3c2b6;
+  --lime: #cfeea0;
+  --act: #8f4a17;
+  --act-soft: #f1e6da;
+  --act-line: #e0cbb4;
+  --ok: #2c6646;
+  --ok-soft: #e0eadc;
+  --ok-line: #c3d6bf;
+  --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 20px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; min-width: 0; }
+h1 { font-family: var(--display); font-size: clamp(26px, 4vw, 34px); line-height: 1.15; margin: 0; letter-spacing: -.01em; text-wrap: balance; }
+h2 { font-family: var(--display); font-size: 19px; margin: 0; }
+h3 { font-size: 14px; margin: 0; }
+.hint { color: var(--muted); font-size: 13.5px; margin: 4px 0 0; }
+.note { color: var(--muted); font-size: 13px; }
+
+/* Header */
+.brand { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.brand img { display: block; height: 26px; width: auto; }
+.brand .x { width: 1px; height: 26px; background: rgba(255,255,255,.28); }
+.hero { display: grid; gap: 14px; background: var(--brand); color: var(--brand-ink); border-radius: 16px; padding: 28px 28px 30px; }
+.hero h1 { color: #fff; margin-top: 10px; }
+.hero h1 span { color: var(--lime); }
+.hero p { margin: 0; color: var(--brand-muted); max-width: 64ch; }
+@media (max-width: 480px) { .hero { padding: 22px 18px 24px; } .brand img { height: 22px; } .brand .x { height: 22px; } }
+
+/* Ask */
+.ask label { font-weight: 600; display: block; margin-bottom: 10px; font-size: 16px; }
+textarea { width: 100%; min-height: 92px; resize: vertical; font: inherit; color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+textarea:focus { border-color: var(--accent); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ask .row.bottom { margin-top: 12px; justify-content: space-between; }
+button { font: inherit; cursor: pointer; border-radius: 9px; border: 1px solid transparent; padding: 10px 18px; font-weight: 600; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:disabled { opacity: .55; cursor: default; }
+.btn-ghost { background: var(--surface); border-color: var(--line); color: var(--ink); font-weight: 500; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.chips .lbl { font-size: 12px; color: var(--muted); margin-right: 4px; align-self: center; }
+.chip { background: var(--accent-soft); color: var(--accent); border: 0; border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 500; }
+.chip:hover { background: #cfdfca; }
+
+/* Answer */
+.answer[hidden], #excerpts[hidden] { display: none; }
+.status { display: inline-flex; align-items: center; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; }
+.st-ok { background: var(--ok-soft); color: var(--ok); }
+.st-warn { background: var(--act-soft); color: var(--act); }
+.st-info { background: var(--accent-soft); color: var(--accent); }
+.summary { font-size: 16px; margin: 12px 0 0; }
+ol.steps { margin: 12px 0 0; padding-left: 22px; display: grid; gap: 6px; }
+.meta { margin-top: 12px; font-size: 13px; color: var(--muted); }
+.thinking { display: flex; align-items: center; gap: 10px; color: var(--muted); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1s infinite ease-in-out; }
+@keyframes pulse { 50% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) { .dot { animation: none; } }
+.contact { background: var(--accent-soft); border-radius: 10px; padding: 14px 16px; margin-top: 16px; }
+.contact .label { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); font-weight: 700; }
+.contact .name { font-weight: 700; margin-top: 2px; }
+.contact p { margin: 4px 0 0; font-size: 14px; }
+.copybox { margin-top: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 13px; white-space: pre-wrap; word-break: break-word; }
+.feedback { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+/* SOP excerpts */
+#excerpts h2 { margin-bottom: 10px; }
+details.sec { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+details.sec + details.sec { margin-top: 8px; }
+details.sec summary { cursor: pointer; padding: 11px 14px; font-weight: 600; list-style: none; display: flex; gap: 10px; align-items: baseline; }
+details.sec summary::-webkit-details-marker, details.err summary::-webkit-details-marker { display: none; }
+details.sec summary .num { font-size: 12px; color: var(--accent); font-weight: 700; }
+details.sec .body { padding: 0 14px 14px; font-size: 14px; min-width: 0; }
+.snippet { color: var(--muted); font-size: 13px; padding: 0 14px 10px; margin-top: -4px; }
+.md h4 { font-size: 14px; margin: 14px 0 6px; }
+.md p { margin: 6px 0; }
+.md ul { margin: 6px 0; padding-left: 20px; }
+.tablewrap { overflow-x: auto; margin: 8px 0; }
+.md table { border-collapse: collapse; font-size: 13px; min-width: 100%; }
+.md th, .md td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+.md th { background: var(--sunk); }
+mark { background: #e9e3b8; color: inherit; padding: 0 2px; border-radius: 2px; }
+
+/* Reference blocks */
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.errgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+@media (max-width: 760px) { .errgrid { grid-template-columns: minmax(0, 1fr); } }
+.group { border-radius: 12px; padding: 4px 14px 8px; }
+.group.act { background: var(--act-soft); border: 1px solid var(--act-line); }
+.group.ok { background: var(--ok-soft); border: 1px solid var(--ok-line); }
+.group h3 { padding: 10px 0 6px; display: flex; justify-content: space-between; gap: 8px; }
+.group.act h3 { color: var(--act); }
+.group.ok h3 { color: var(--ok); }
+.group h3 .count { font-weight: 600; font-size: 12px; opacity: .8; }
+details.err { border-top: 1px solid rgba(0,0,0,.07); }
+details.err summary { cursor: pointer; list-style: none; padding: 10px 0; font-weight: 600; display: flex; justify-content: space-between; gap: 8px; }
+details.err summary::after { content: "+"; color: var(--muted); font-weight: 500; }
+details.err[open] summary::after { content: "–"; }
+details.err .b { padding: 0 0 12px; font-size: 14px; display: grid; gap: 6px; }
+details.err .b p { margin: 0; }
+details.err .b .k { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: block; }
+.duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 760px) { .duo { grid-template-columns: minmax(0, 1fr); } }
+dl.facts { margin: 14px 0 0; display: grid; gap: 0; }
+dl.facts > div { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+dl.facts > div:first-child { border-top: 0; }
+dl.facts dt { font-weight: 700; font-family: var(--display); color: var(--accent); }
+dl.facts dd { margin: 0; font-size: 14px; }
+@media (max-width: 420px) { dl.facts > div { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
+ul.dir { list-style: none; padding: 0; margin: 14px 0 0; }
+ul.dir li { padding: 10px 0; border-top: 1px solid var(--line); }
+ul.dir li:first-child { border-top: 0; }
+ul.dir .k { font-weight: 600; display: block; }
+ul.dir .v { color: var(--muted); font-size: 13.5px; }
+
+/* Onboarding */
+.onboard { padding: 26px; }
+.ob-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 28px; }
+@media (max-width: 760px) { .ob-grid { grid-template-columns: minmax(0, 1fr); gap: 22px; } }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.onboard h2 { margin-top: 4px; }
+.ob-lead { margin: 10px 0 0; max-width: 60ch; }
+.ob-list { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.ob-list li { position: relative; padding-left: 20px; font-size: 14.5px; }
+.ob-list li::before { content: ""; position: absolute; left: 2px; top: .6em; width: 7px; height: 7px; border-radius: 2px; background: var(--accent); }
+.ob-side { background: var(--sunk); border-radius: 12px; padding: 18px; }
+.ob-side h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.ob-side h3.mt { margin-top: 18px; }
+ul.tools { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 8px; }
+ul.tools a { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; text-decoration: none; color: var(--ink); }
+ul.tools a:hover { border-color: var(--accent); }
+ul.tools .t { font-weight: 600; display: block; }
+ul.tools .d { font-size: 12.5px; color: var(--muted); display: block; }
+ul.tools .arr { color: var(--accent); font-weight: 700; flex: none; }
+ol.first { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14px; }
+
+/* Owner panel */
+.owner[hidden] { display: none; }
+.gap { border-top: 1px solid var(--line); padding: 10px 0; display: grid; gap: 4px; }
+.gap:first-of-type { border-top: 0; }
+.gap .q { font-weight: 500; }
+.gap .m { font-size: 12px; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--accent); font-weight: 600; font-size: 12px; }
+footer { color: var(--muted); font-size: 12px; text-align: center; }
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="brand">
+      <img src="data:image/png;base64,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" alt="Boolanga">
+      <span class="x" aria-hidden="true"></span>
+      <img src="data:image/png;base64,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" alt="Bolt Food">
+    </div>
+    <h1>Asset Delivery <span>Help Desk</span></h1>
+    <p>New to merchant operations at Bolt? Start with what Boolanga does for you and the tools you'll use. Stuck on an order? Ask below and get the answer from the SOP, plus where to go if you still need help.</p>
+  </header>
+
+  <section class="card onboard" aria-labelledby="obTitle">
+    <div class="ob-grid">
+      <div>
+        <span class="eyebrow">Start here</span>
+        <h2 id="obTitle">What Boolanga does for Bolt</h2>
+        <p class="ob-lead">Boolanga runs the logistics behind merchant onboarding. When a new restaurant or store joins Bolt, Boolanga makes sure the right devices and onboarding items reach them, and takes them back when they leave.</p>
+        <ul class="ob-list">
+          <li><strong>Stores your stock</strong> in local warehouses: Sunmi V3 tablets, SIM cards, tabletops and stickers.</li>
+          <li><strong>Ships to merchants</strong> from the orders you place in OMS, and tracks every parcel to delivery.</li>
+          <li><strong>Activates devices</strong> in the markets where activation is still needed.</li>
+          <li><strong>Handles exchanges and returns</strong>, including refurbishing used devices so they can be sent out again.</li>
+          <li><strong>Runs OMS</strong>, where you place orders and see stock and delivery status.</li>
+          <li><strong>Supports you</strong> through Customer Support tickets and the shared Slack channels.</li>
+        </ul>
+      </div>
+      <div class="ob-side">
+        <h3>Your tools</h3>
+        <ul class="tools" id="tools"></ul>
+        <h3 class="mt">Your first steps</h3>
+        <ol class="first">
+          <li>Request OMS access with a ticket (topic: OMS Boolanga Dashboard – Login Request).</li>
+          <li>Read SOP section 02 before your first order. Missing or incorrect data cancels the order.</li>
+          <li>Join <a href="https://boolanga.slack.com/archives/C090Y0PTB1C" target="_blank" rel="noopener">#boltfood-boolanga-critical-escalations</a> on Slack.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <form class="card ask" id="askForm" autocomplete="off">
+    <label for="q">What do you need help with?</label>
+    <textarea id="q" placeholder="e.g. My order has been in Processing since yesterday and has no error. What should I do?"></textarea>
+    <div class="chips" id="chips"><span class="lbl">Try:</span></div>
+    <div class="row bottom">
+      <span class="note" id="modeHint">Answers come from the SOP. Please don't include merchant phone numbers or other personal data.</span>
+      <div class="row">
+        <button type="button" class="btn-ghost" id="stopBtn" hidden>Stop</button>
+        <button type="submit" class="btn-primary" id="askBtn">Get answer</button>
+      </div>
+    </div>
+  </form>
+
+  <section class="card answer" id="answer" hidden aria-live="polite"></section>
+
+  <section id="excerpts" hidden>
+    <h2>Related SOP sections</h2>
+    <div id="excerptList"></div>
+  </section>
+
+  <section class="card">
+    <div class="section-head">
+      <div>
+        <h2>Shipment errors</h2>
+        <p class="hint">What each error in OMS means and what to do. Tap an error to open it.</p>
+      </div>
+    </div>
+    <div class="errgrid">
+      <div class="group act"><h3>You need to act <span class="count" id="actCount"></span></h3><div id="actList"></div></div>
+      <div class="group ok"><h3>No action needed <span class="count" id="okCount"></span></h3><div id="okList"></div></div>
+    </div>
+  </section>
+
+  <div class="duo">
+    <section class="card">
+      <h2>Key timelines</h2>
+      <dl class="facts" id="facts"></dl>
+    </section>
+    <section class="card">
+      <h2>Where to go</h2>
+      <ul class="dir" id="dir"></ul>
+    </section>
+  </div>
+
+  <section class="card owner" id="owner" hidden>
+    <h2>Questions to review <span class="note" id="gapCount"></span></h2>
+    <p class="hint">Only you and editors see this: questions the SOP didn't answer, and answers marked as not helpful.</p>
+    <div id="gapList" style="margin-top:10px"><p class="note">Loading…</p></div>
+  </section>
+
+  <footer>Based on the SOP "Bolt Food: Asset Delivery with Boolanga". If an answer conflicts with the SOP document, the document applies.</footer>
+</div>
+
+<script type="text/plain" id="sop-src">STANDARD OPERATING PROCEDURE · Boolanga × Bolt Food
+
+# **SOP Bolt Food: Asset Delivery with Boolanga**
+
+Prepared in partnership with Bolt Food · Boolanga Business
+
+  
+
+### **Contents**
+
+  
+
+1.  Intro
+2.  Order Submission & Required Data
+3.  Order Flow
+4.  Order Cancellation
+5.  Customer Support Ticket Submission
+6.  Stock and Inbounding
+7.  Address Format
+8.  OMS Guide
+9.  E-shop Guide
+10. Change Log
+
+## **01 · Intro**
+
+This SOP encompasses the process of asset delivery management for Bolt Food in collaboration with Boolanga. It defines the standardized workflow for submitting, processing, and fulfilling onboarding asset delivery requests to ensure seamless operations, high efficiency, and precision in order execution.
+
+[Boolanga OMS](https://restaurant.boltoms.wearyourbrand.co/login): for user requests, please submit a customer support request as described in section 05.
+
+### **Key Objectives**
+
+1.  **Consistency:** Provide a clear, repeatable process for placing delivery requests.
+2.  **Accountability:** Define roles and expectations for Bolt Food, Boolanga, and other stakeholders.
+3.  **Efficiency:** Streamline data input and communication between systems (Salesforce, OMS, and Boolanga).
+4.  **Accuracy:** Ensure complete and correct data is provided to avoid delivery delays or errors.
+5.  **Transparency:** Establish traceable workflows for all asset delivery requests.
+6.  **Governance:** Set in place guardrails to ensure that whenever any changes are needed, these are reviewed against a centrally established process to avoid unnecessary exceptions (deviations).
+
+### **Key Documents**
+
+|  |  |
+| :-: | :-: |
+| Document | What it is for |
+| [EXTERNAL – BOLT Inbounding sheet\_WH information](https://docs.google.com/spreadsheets/d/16DB060LN6C2h3vZrYAWBSMz1QSrwcACZa5RbO97AjJM/edit?gid=1128162749#gid=1128162749) | This sheet tracks shipments and offers information about warehouse addresses and inbounding rules. If you need to send anything to the warehouse, please mark it in the sheet following the instructions. If you require a pickup, indicate it in the sheet, and my colleagues will arrange a quotation. |
+| [\[EXTERNAL\] Bolt Food fulfilment pricing\_2026](https://docs.google.com/spreadsheets/d/1r6eq9CuTSSj5PzMlerEIw4EdEsRv95vBeAt2AeXXg7w/edit?gid=0#gid=0) | Breakdown of current FF prices, any change will be reflected in the sheet and agreed centrally. |
+| [Provider, Bolt Food Restaurant Onboarding Emails](https://drive.google.com/drive/folders/147wKlNHU7X1pEYsLKvR7UPOygxI2qbGP?usp=drive_link) | E-mail templates and triggers on the communications sent automatically to providers. |
+| [Bolt \<\> Boolanga\_Shipment Errors](https://docs.google.com/spreadsheets/d/19Zsf-6H6AFgceIkDQeSwXT0WbgSesEAn-JB2C5LBH_g/edit?gid=0#gid=0) | Shipment error explanations and actions. |
+| [SKU\_Product/Market\_Bolt Mops.](https://docs.google.com/spreadsheets/d/1O_N_pjwUSbWQTENfonHmjgxaOc4-o-Och1Uv8cK7YNc/edit?gid=0#gid=0) | SKUs per product and market as set up in OMS. The SKUs must match the actual product. |
+| [Warehouse activation guidelines](https://drive.google.com/drive/folders/18VQn18Jb0uP_PPdZTXAOIs8Q4slMA6n1?usp=drive_link) | Guidelines the warehouses follow when they activate devices. |
+| [Email Comms: Bolt Food Merchants](https://docs.google.com/document/d/1skxnkpPjAiqile1sjjcjXinoQeneT6v9cf1xTHRJWLk/edit?tab=t.0#heading=h.i8exmzpeylhq) | Templates, triggers and localised versions of the automatic emails sent to merchants. |
+
+## **02 · Order Submission & Required Data**
+
+**⚠ Strict Compliance Policy:** Missing or incorrect data (e.g., zip codes) causes automatic order cancellation. You will be notified of the cancellation and must re-create the order.
+
+### **Order Channels**
+
+|  |  |
+| :-: | :-: |
+| Onboarding orders | Exchange & return orders |
+| Submit via Salesforce | Submit directly via [Boolanga OMS](https://restaurant.boltoms.wearyourbrand.co/login) |
+
+### **Mandatory Data Checklist**
+
+  - **Recipient Name:** Full first and last name.
+  - **Restaurant Details:** Exact Merchant Name and Merchant ID.
+  - **Contact Info:** Reliable mobile number and email. Couriers call this number and all updates are sent via text/email.
+  - **Full Address:** Street name, house number, city, and zip code.
+  - **Special Instructions:** If located in a mall or hard-to-find spot, details must be added to the "notes" field.
+  - **Merchant ID:** Bolt Food internal Provider ID.
+
+### **Before You Submit**
+
+1.  Address validation can be overwritten. Please check the address before submitting and make sure the address that was pulled in is correct. If not, make the necessary corrections.
+2.  Notes field: please be as concise as possible, as we might face character limit constraints. Add up to 50 characters.
+3.  You're unable to place an order for an item that is out of stock, or for a kit that has an item out of stock. In that case, you may select a product/kit that has available stock.
+4.  If you're submitting an exchange order, make sure you change the default selection at the bottom of the page from "regular" to "exchange".
+5.  If you're submitting an exchange order, please make sure you select "exchange without return order" in case a return is not required.
+6.  If the merchant is located inside a shopping center, mall, or similar complex, please provide as much location detail as possible, including the shop number and exact location within the property.
+
+▶ Order submission preview: [OMS_Order submission_V1.mp4](https://drive.google.com/file/d/10wodloyoiHZhv6s4cq4KcOjXMjRwPt2y/view?usp=sharing)
+
+### **Bulk Orders**
+
+Any order above 20 pieces is a bulk order. When a bulk order is submitted in OMS, Paweł Dąbrowski and Joana Duó (Bolt) receive a request to approve or decline it.
+
+### **Products and SKUs**
+
+Besides new devices, OMS has three Sunmi V3 products for used and returned devices:
+
+  - **Sunmi V3 ready to reuse:** used devices collected from merchants that have been refurbished and are fully functional.
+  - **Sunmi V3 damaged:** faulty devices, ready to be disposed of.
+  - **Sunmi Return:** the product to select when you submit a return order. Once the device is back at the warehouse, the warehouse refurbishes it if possible and puts it on the correct stock.
+
+**Sunmi V3 SKU per market (all products and SKUs are in** [**SKU_Product/Market_Bolt Mops.**](https://docs.google.com/spreadsheets/d/1O_N_pjwUSbWQTENfonHmjgxaOc4-o-Och1Uv8cK7YNc/edit?gid=0#gid=0)**):**
+
+|  |  |
+| :-: | :-: |
+| Market | Sunmi V3 SKU |
+| Bulgaria | BG6972253512897 |
+| Czech Republic | CZ6972253512897(2) |
+| Estonia | 6972253512897EE |
+| Latvia | 6972253512897(2) LV |
+| Lithuania | 6972253512897(2) LT |
+| Malta | 6972253512897 |
+| Poland | 6972253512897 |
+| Portugal | 6972253512897 |
+| Romania | RO6972253512897 |
+| Slovakia | SK6972253512897(2) |
+| Ukraine | 6972253512897 |
+
+  
+  
+
+### **Shipment Errors**
+
+When an order can't be processed or delivered as planned, Boolanga Customer Support logs a shipment error on the order in OMS. The table below shows the cause of each error and who fixes it. Full reference: [Bolt \<> Boolanga_Shipment Errors](https://docs.google.com/spreadsheets/d/19Zsf-6H6AFgceIkDQeSwXT0WbgSesEAn-JB2C5LBH_g/edit?gid=0#gid=0).
+
+**Who fixes it:** Bolt = Bolt local team / sales person (order data or merchant); Boolanga = Boolanga CS with the warehouse; Carrier = the courier; No action = information only.
+
+|  |  |  |  |  |
+| :-: | :-: | :-: | :-: | :-: |
+| Shipment error | Cause | Who fixes it | Next step (OMS button) | Status |
+| **Wrong address** | Incorrect city, zip code or street name on the order, or the restaurant can't be found in the area. | Bolt (order data) | Order is cancelled or RTS is requested. Create a new order with the correct address. (Cancel) | Processing/Forwarded |
+| **Insufficient address** | House or apartment number missing, or no instructions for an address inside a large building or shopping mall. | Bolt (order data) | Cancel the order and create a new one with the complete address. (Cancel) | Processing/Forwarded |
+| **Incorrect receiver details** | Incorrect phone number, or the shop name is different from the one on the order. | Bolt (order data) | Cancel the order and create a new one with the correct data. (Cancel) | Processing/Forwarded/Sent |
+| **Redirection** | The address was incorrect and the parcel was redirected to another address. If the new address is in another city, delivery can take up to one more week. | Bolt (order data) | RTS is requested. Create a new order with the correct data. (Comment) | Processing/Forwarded/Sent |
+| **Recipient not available** | The restaurant was closed, nobody at the location knew about the package, or the recipient didn't answer the courier's call. | Bolt (merchant) | Sales person is notified. Contact the merchant so someone is there for the next attempt. (Comment) | Processing/Forwarded/Sent |
+| **Refused** | The recipient didn't accept the delivery. | Bolt (merchant) | Parcel is returned to the warehouse, no second attempt. Create a new order if it's still needed. (Comment) | Processing/Forwarded/Sent |
+| **Pick-up point** | Home delivery failed, or the recipient asked to collect the parcel at a pick-up point. | Bolt (merchant) | Sales person is notified. The merchant must collect the parcel within 5 business days. (Information) | Processing/Forwarded/Sent |
+| **Out of stock** | The item showed as in stock in OMS, but the warehouse couldn't fulfil the order, for example because of a stock discrepancy. Orders for items that are out of stock in OMS can't be placed. | Bolt (new order) | Cancel the order and create a new one with an item in stock. (Cancel) | Processing/Forwarded |
+| **Technical issue** | OMS: A  product out of stock. Warehouse: label printing or system issues delaying dispatch. Courier: hub processing issues or a faded label. Stock shortage. | Boolanga or Carrier (Bolt if the cause is stock or address length) | Sales person is notified. (Information) | Processing/Forwarded |
+| **Reshipped** | The warehouse sent a new parcel for the same order and generated a new tracking number. No new order is created. | No action | Sales person is notified. Track the order with the new tracking number. | Processing/Forwarded/Sent |
+| **Stock taking** | The warehouse's yearly inventory count delays dispatch. | Boolanga (warehouse) | Sales person is notified. (Information) | Processing/Forwarded |
+| **Bank holiday** | A bank holiday delays dispatch from the warehouse or shipping. | No action | Sales person is notified. (Information) | Processing/Forwarded/Sent |
+| **Transit delay** | The courier is delayed moving the parcel between hubs. Only logged during peak promotional periods or exceptional weather. | Carrier | Sales person is notified. (Information) | Processing/Forwarded/Sent |
+
+  
+
+### **Ukraine Exceptions**
+
+Ukraine has its own rules for delivery, order data, returns and inbound shipments. They apply on top of everything above in this section. Orders that break them are cancelled and must be submitted again with the correct data.
+
+**Delivery and address**
+
+  - **Home delivery only:** send the order to the restaurant's physical address. Orders submitted to a Nova Poshta branch are cancelled with a note, because branch orders never switch to Delivered. Create a new order with the restaurant's address.
+  - **City and zip code are required:** orders with a blank city field, or a "-" instead of the city, are cancelled. Resubmit with the complete address.
+
+**Field validations**
+
+**The Ukraine warehouse only accepts Cyrillic characters.** Orders with Latin letters or special characters get stuck in Processing and have to be forwarded by hand, which delays delivery. The validations below are ready in OMS and will be turned on once the Bolt Ukraine team has been informed:
+
+  - **Name and consignee:** only Cyrillic characters are accepted. Latin letters or other characters return the error "Only Cyrillic characters are allowed".
+  - **Phone number:** exactly 13 characters in the format +380xxxxxxxxx (+380 followed by 9 digits).
+  - **Postal code:** exactly 5 digits. Never enter a Nova Poshta branch number in this field.
+  - **Address and city:** write them in Cyrillic, without special characters such as brackets. For example, enter "Пісочин", not "Пісочин (область Харківська)".
+
+**Returns**
+
+Returns work differently in Ukraine. The courier doesn't collect the tablet from the restaurant.
+
+  - **Notification:** after the return order is submitted, Boolanga sends the merchant a notification with all the information they need.
+  - **Drop-off:** the merchant takes the tablet to the closest Nova Poshta branch.
+  - **No cost for the merchant:** the merchant doesn't need to print a label or pay anything.
+
+**Inbound shipments**
+
+Always confirm a shipment with Boolanga before you send it. We confirm the correct warehouse address, which depends on warehouse capacity. Then add the shipment to the Ukraine tab of the inbounding sheet as usual.
+
+  
+
+## **03 · Order Flow**
+
+1.  **Order Placed** → status **Processing**
+2.  **Sent to Warehouse** → status **Forwarded**
+3.  **Parcel Packed**
+4.  **Handed to Courier** → status **Sent / In-Transit**
+5.  **Home Delivery, Attempt 1.** Delivered successfully? Yes → **Order Delivered**. No → Attempt 2. Exceptions: if the merchant refuses the parcel, it is returned to the warehouse with no second attempt; if the address is incorrect, the next attempt is only made after the address has been corrected.
+6.  **Home Delivery, Attempt 2.** Delivered successfully? Yes → **Order Delivered**. No → redirected to a pick-up point.
+7.  **Redirected to Pick-Up Point** → status **Available for Pick-Up** (max. 5 business days). Collected by merchant? Yes → **Collected · Delivered**. No → **Returned to Sender** (RTS → Returned).
+
+Standard delivery for Bolt is home delivery. An order only goes to a pick-up location if delivery fails: after 2 unsuccessful delivery attempts, the parcel is redirected to a pick-up location so the merchant can collect it.
+
+### **Delivery Flow (all markets)**
+
+  - **Delivery attempts:** 2 home delivery attempts in every market.
+  - **Refused on the first attempt:** the order is returned to the warehouse. No second attempt is made.
+  - **Incorrect address:** the next attempt is only made after the address has been corrected.
+  - **Time at the pick-up location:** 5 business days. If the merchant doesn't collect the parcel in time, it is returned to the warehouse.
+
+**Couriers per market (full list in** [**Boolanga_Courier Map**](https://docs.google.com/spreadsheets/d/1F61F4QzXev_KrtSDB2mEqZaySe1D9DTAuO22LGYLnpI/edit)**):**
+
+  
+
+|  |  |
+| :-: | :-: |
+| Market | Courier |
+| Bulgaria | Sameday |
+| Czech Republic | GLS |
+| Estonia | SmartPosti |
+| Latvia | SmartPosti |
+| Lithuania | SmartPosti |
+| Malta | Arrow Express |
+| Poland | InPost |
+| Portugal | DPD |
+| Romania | GLS |
+| Slovakia | SPS Slovak Parcel Service |
+| Ukraine | NovaPoshta |
+
+  
+
+### **Order Statuses**
+
+|  |  |  |
+| :-: | :-: | :-: |
+| Status | Time in status | Description |
+| **Processing** | Less than 24 hours | The order has been received in the Boolanga system. If there are no technical issues, it will be forwarded to the warehouse (WH). Such issues might include:  - IT bugs: these rarely happen; if they do, our team will diligently work on solving the issue, then forward the orders to the WH.&#10;  - Stock shortage: logged as a shipment error, which triggers automatic cancellation of the order, and you'll be requested to select a different product. |
+| **Forwarded** | Max. 24 hours | The order is now in the warehouse's system, and they are preparing the parcel. If the order was submitted within the cut-off time, it will be dispatched on the same day; if it was submitted after the cut-off time, it will be dispatched the next working day. |
+| **Sent** | Max. 72 hours (Sent + In-Transit) | The parcel has been dispatched from the warehouse and is en route to the courier. Once the order reaches this status, a tracking number will be assigned. This means the parcel was created in the courier's system. |
+| **In-Transit** | Max. 72 hours (Sent + In-Transit) | The parcel is in the possession of the courier, who transfers it between hubs until it reaches the destination city. |
+| **Delivered** |   | The parcel has successfully reached its destination and has been handed over to the recipient. |
+| **Available for Pick-Up** | Max. 5 business days | Home delivery was unsuccessful after 2 attempts, so the courier redirected the parcel to a designated pick-up location for the merchant to collect. If it isn't collected within 5 business days, it is returned to the warehouse. |
+| **RTS (Return to Sender)** |   | The delivery failed and the order is being returned. If you still want this to be delivered, please review the order and the shipment errors logged, and create a new order with additional details. |
+| **Returned** |   | Delivery failed, or the parcel was not picked up from the collection point within the specified timeframe. The courier returns the parcel to the warehouse. |
+| **Cancelled** |   |   - Processing: the order was cancelled while in "Processing" status and was never forwarded to the warehouse.&#10;  - Forwarded: the warehouse received the order request, but it was cancelled before packing.&#10;  - Sent: the parcel was already dispatched, but a request was made to the courier to halt delivery and return the parcel to the warehouse, where it will be restocked. In this case, cancellation cannot be guaranteed; we recommend contacting the merchant in case they receive the delivery. They should reject it. |
+| **Booked for Pick-up** |   | Relates to return orders. The WH has reached out to the merchant and has booked a pick-up date. |
+| **Failed Pick-up** |   | Relates to return orders. |
+
+### **Device Activation**
+
+Where activation is still needed, the warehouses activate devices following the [Warehouse activation guidelines](https://drive.google.com/drive/folders/18VQn18Jb0uP_PPdZTXAOIs8Q4slMA6n1?usp=drive_link). Bolt can switch activation off per market. Current status per market ([Market tracker_Activation process](https://docs.google.com/spreadsheets/d/1ScxmwLJOiTnFnTjlkLtEdr3AjHIBEgqJ528-1RGDEPE/edit)):
+
+  - **Activation stopped:** Portugal, Slovakia, Czech Republic, Estonia, Lithuania, Latvia.
+  - **Still activating the remaining Sunmi V3 stock:** Romania, Poland, Ukraine, Malta, Bulgaria.
+  - **Credentials:** login credentials are no longer entered on devices in any market.
+
+### **Merchant Communication**
+
+Merchants receive automatic emails about their package, sent in the name of the Bolt Food team to the merchant's contact email on the order. The templates and localised versions are in [Email Comms: Bolt Food Merchants](https://docs.google.com/document/d/1skxnkpPjAiqile1sjjcjXinoQeneT6v9cf1xTHRJWLk/edit?tab=t.0#heading=h.i8exmzpeylhq). The table shows what triggers each email and the order status it belongs to.
+
+|  |  |  |  |
+| :-: | :-: | :-: | :-: |
+| Email | Trigger | Order status | Sent to |
+| Onboarding: Package shipped | The package is dispatched from the warehouse | Sent | Merchant |
+| Onboarding: Package arrived (with device guide) | The package is delivered | Delivered | Merchant |
+| Onboarding: Package ready to pick up | Home delivery failed and the package is at a pick-up point | Available for Pick-Up | Merchant |
+| Onboarding: Pick-up reminder | The package is still waiting at the pick-up point | Available for Pick-Up | Merchant |
+| Exchange: Replacement shipped | The replacement device is dispatched | Sent | Merchant |
+| Exchange: Replacement ready to pick up | Home delivery failed and the replacement is at a pick-up point | Available for Pick-Up | Merchant |
+| Exchange: Pick-up reminder | Daily until the replacement is collected | Available for Pick-Up | Merchant |
+| Exchange: Faulty device collection details | The pick-up of the faulty device is booked (3rd day after the exchange request) | Booked for Pick-up | Merchant |
+| Exchange: Faulty device collection unsuccessful | The pick-up attempt failed and a new pick-up is booked | Failed Pick-up | Merchant |
+| Return: Book Now (BG, CZ, RO) | The return request is received. The merchant books the courier pick-up through the Book Now button | To be confirmed | Merchant |
+| Return: Book Now reminder (BG, CZ, RO) | The merchant hasn't booked the pick-up yet | To be confirmed | Merchant |
+| Return: Collection details (other markets) | The pick-up is booked (3rd day after the offboarding request) | Booked for Pick-up | Merchant |
+| Return: Nova Poshta drop-off (Ukraine) | A return tracking number is created. The merchant drops the device off at the nearest Nova Poshta branch | To be confirmed | Merchant |
+| Return: Collection unsuccessful | The pick-up attempt failed and a new pick-up is booked | Failed Pick-up | Merchant |
+
+  
+
+## **04 · Order Cancellation**
+
+You can cancel an order using the "Cancel Order" button in OMS while it is in "Processing" or "Forwarded" status (still in the warehouse).
+
+Orders that have reached "Sent" status cannot be officially cancelled, as we cannot guarantee the courier will receive the cancellation before delivery. In such cases, please:
+
+  - Notify the merchant to reject the package, if possible.
+  - Provide the reason for cancelling the order. Customer Support will advise you on the next steps.
+  - Contact Customer Support via OMS or SF using the commenting section to ensure the order's progress is properly documented for historical tracking.
+
+**⚠ Please DO NOT submit an escalation for this reason.**
+
+## **05 · Customer Support Ticket Submission**
+
+### **Escalation Workflow**
+
+Before outlining the escalation process, it's important to define the Service Level Agreement (SLA). An order is considered delivered within SLA if it arrives within the following timeframe, calculated from the business day after the order is placed (the order date itself is considered Day 0):
+
+  
+
+|  |  |
+| :-: | :-: |
+| Orders placed before 11:00 AM | Orders placed after 11:00 AM |
+| **3 business days**Within SLA: same day (0-day), 1-day, 2-day, or 3-day delivery. | **4 business days**Within SLA: same day (0-day), 1-day, 2-day, 3-day, or 4-day delivery. |
+
+### **Detailed Instructions on Order Escalation**
+
+|  |  |
+| :-: | :-: |
+| ✓ Valid ticket submissions | ✗ Do not escalate |
+|   - Order has exceeded SLA and is past the expected delivery date (accessible within OMS).&#10;  - Order has been in Processing for over 24 hours, with no errors logged in OMS. |   - Tracking shows Delivered, but OMS/SF not updated for under 6 hours. Such status update delays are considered normal. If you want, you can update the status manually, as described under Manual Status Updates (section 08).&#10;  - Order already escalated by the Boolanga CS team with proper OMS logging.&#10;  - Ticket already submitted for this order: no duplicate tickets.&#10;  - Order within transit SLA.&#10;  - General questions related to cancellation or address: please keep these under the order, in OMS. |
+
+### **Ticket Categories**
+
+  - Exchange
+  - Onboarding
+  - Return
+  - Other: use this category for technical or operational questions that are not related to a specific order. This includes general inquiries or issues that do not fall under the other categories.
+
+### **Ticket Topics**
+
+  - **OMS Boolanga Dashboard – Login Request:** the request must include the user's email address, full name, and an example user account for reference.
+  - **Lost / Damaged Package:** the request must include the specific order number related to the issue.
+  - **Operational / Technical Issues:** use this for issues related to order processing, questions about stock discrepancies, and any technical or OMS-related problems.
+  - **Status Update on Delayed Orders:** use this to escalate orders out of SLA. Please don't use it for orders within SLA, or for inquiries about the whereabouts of an order.
+  - **Order Inquiry:** use this to inquire about an order that is within SLA. If the details are shared in OMS and logged, please avoid submitting a ticket for it.
+
+### **Slack Channel Structure**
+
+1.  [**#boltfood-boolanga-critical-escalations**](https://boolanga.slack.com/archives/C090Y0PTB1C)**:** channel linked to form in canvas (Zoho); we're notified when a new ticket is submitted, as well as daily updates on open tickets. Boolanga CS will raise escalations from our end (e.g. device activation problem, stock shortage) in this channel with the incident report workflow.
+2.  [**#boolanga-bolt-global-ops:**](https://boolanga.slack.com/archives/C069GPAR1CH) channel used to discuss daily operational and strategic matters of the cooperation.
+3.  [**#boolanga-bolt-retail-device-delivery**](https://join.slack.com/share/enQtMTI1Mjc2NzA1OTE1NDItZjJmOTIxMzE3MzNmMjQwOTdiYWU5NGQ2NmY3YTk1MGRhNjIxODMyOTEwMjJiOWUxODVmODNkZGY5NDgwY2FkNA)**:** channel used to discuss daily operational matters related to retail device delivery. Once the service is more settled, this channel will be archived, leaving only the submit-a-ticket link as an escalation process.
+
+  
+  
+
+### **Useful Links**
+
+|  |  |
+| :-: | :-: |
+| Item | Description |
+| [Submit Ticket](https://forms.zohopublic.eu/boolanga/form/BoltFoodBoolangaSupport/formperma/-2JW6qirerPsLZhUgeZjUKFKwubfNeBfeGp1pa9yDAo) | Use this link to submit tickets to customer support. Tickets receive an ID and replies are sent via email and channel notifications. For multiple orders, provide the leading Order ID and the remaining ones in the description. General order resolution occurs in SF and OMS; only certain categories can be addressed directly to support. For non-order requests, use "0" for order and case IDs. |
+| [Standard Operating Process](https://docs.google.com/document/d/10N80tOCp7AWXPy1854v2t4RgLcGC1d2DjsE3CDH1NC8/edit?tab=t.vi28wkbajzhw) | Main guide for the Bolt Food–Boolanga device distribution cooperation. Contains procedures, guidance, and links to useful documents. Continuously updated. |
+| [Inbounding](https://docs.google.com/spreadsheets/d/16DB060LN6C2h3vZrYAWBSMz1QSrwcACZa5RbO97AjJM/edit?gid=1128162749#gid=1128162749) | If you're planning any shipment to the warehouse, please add it to the inbounding sheet at least 2 business days ahead. If you don't have an exact ETA, please still notify us. Please check and follow the rules on the "Inbounding Rules" and "User Manual" pages. Please tag barbara@boolanga.com when you've finished adding a shipment so the Boolanga Ops team is notified as well. |
+| [Boolanga Requests Collection Sheet](https://docs.google.com/spreadsheets/d/1rSiniRDcR92m_cNV2W9JSkbDNNz3z65JpvQkIkER7Aw/edit?gid=1603281029#gid=1603281029) | Main sheet for tracking Boolanga to Bolt requests from the Slack workflow. If Boolanga raises a ticket via Slack, reply in the thread. |
+
+## **06 · Stock and Inbounding**
+
+### **Restocking and Inbounding Guidelines**
+
+Tablet inventory is tracked centrally by Bolt; all other assets shall be monitored and managed for restock by local teams. When inventory levels for an item are below 30 days' coverage, please ensure prompt restocking by sending additional items to our fulfillment center. To facilitate this process, follow these inbounding instructions carefully:
+
+1.  **Access the Inbounding Sheet:** [EXTERNAL – BOLT Inbounding sheet_WH information](https://docs.google.com/spreadsheets/d/16DB060LN6C2h3vZrYAWBSMz1QSrwcACZa5RbO97AjJM/edit?gid=1128162749#gid=1128162749)
+2.  **Locate Your Country-Specific Tab:** search for the tab corresponding to your country code.
+3.  **Complete All Required Columns:** fill out all necessary columns with accurate information from your side. Each column includes detailed instructions to guide you.
+4.  Please make sure you tag <ff@boolanga.com> so we're promptly notified.
+
+**Notes**
+
+1.  Shipments must be announced 2 business days prior to arrival.
+2.  Unannounced shipments can be rejected by the warehouse.
+3.  Unannounced shipments cause extra workload on all fronts.
+4.  Inbound shipments are reflected in stock within 3 business days from when the warehouse confirms the shipment was received.
+5.  The SKUs entered in the inbounding sheet must match the actual products in the shipment.
+
+Adhering to these guidelines ensures a smooth and efficient restocking process.
+
+## **07 · Address Format**
+
+|  |  |  |
+| :-: | :-: | :-: |
+| Country | Format | Example |
+| Portugal | \[Recipient Name\] \[Street Name, Number, Floor\] \[Postal Code\] \[City\] PORTUGAL | João Silva, Rua de São João, 25, 2º Esq., 1000-123 Lisboa, PORTUGAL |
+| Romania | \[Recipient Name\] \[Street Name\] \[Number\], \[Block/Apartment\] \[Postal Code\] \[City\] ROMANIA | Maria Popescu, Strada Libertății 45, Bl. C, Ap. 10, 010203 București, ROMANIA |
+| Slovakia | \[Recipient Name\] \[Street Name\] \[House Number\] \[Postal Code\] \[City\] SLOVAKIA | Peter Novak, Hlavná ulica 128, 811 01 Bratislava, SLOVAKIA |
+| Estonia | \[Recipient Name\] \[Street Name\] \[House Number\], \[Apartment Number\] \[Postal Code\] \[City\] ESTONIA | Jaan Tamm, Tartu mnt 8-5, 10112 Tallinn, ESTONIA |
+| Lithuania | \[Recipient Name\] \[Street Name\] \[House Number\]-\[Apartment\] \[Postal Code\] \[City\] LITHUANIA | Jonas Petrauskas, Gedimino pr. 10-15, 01103 Vilnius, LITHUANIA |
+| Latvia | \[Recipient Name\] \[Street Name\] \[House Number\], \[Apartment Number\] \[Postal Code\] \[City\] LATVIA | Anna Bērziņa, Brīvības iela 15-3, LV-1010 Rīga, LATVIA |
+| Bulgaria | \[Recipient Name\], \[Street Name\], \[Building Number\], \[Apartment/Flat Number (if applicable)\], \[Postal Code\], \[City/Town\], BULGARIAA | Ivan Ivanov, ul. "Vasil Levski" 23, ap. 5, 1000 Sofia, Bulgaria |
+| Poland | \[Recipient Name\] \[Street Name\] \[House Number\]/\[Apartment\] \[Postal Code\] \[City\] POLAND | Jan Kowalski, ul. Marszałkowska 12/5, 00-001 Warszawa, POLAND |
+| Czech Republic | \[Recipient Name\] \[Street Name\] \[House Number\]/\[Orientation Number\] \[Postal Code\] \[City\] CZECH REPUBLIC | Petr Novák, Václavské náměstí 38/1, 110 00 Praha, CZECH REPUBLIC |
+| Ukraine | \[Recipient Name\] \[Street Name\], \[House Number\], \[Apartment Number\] \[Postal Code\] \[City\] UKRAINE | Oksana Ivanenko, вул. Шевченка, 15, кв. 7, 01001 Київ, UKRAINE |
+| Malta | \[Recipient Name\] \[House Name/Number\] \[Street Name\] \[Locality\] \[Postal Code\] MALTA | Paul Farrugia, 12 Triq il-Mosta, San Gwann, SGN 2780, MALTA |
+
+## **08 · OMS Guide**
+
+The Order Management System (OMS) provides comprehensive metrics to monitor and manage operations effectively. These include:
+
+  - **Order Metrics:** detailed statistics on orders placed, processed, and fulfilled.
+  - **Delivery Metrics:** insights into delivery times, delays, shipment errors and performance benchmarks.
+  - **Stock Levels:** real-time inventory data to track asset availability.
+  - **Order List:** a centralized view of all active, completed, and pending orders.
+  - **Order Placement Tools:** creating an order.
+
+### **Getting Started with OMS**
+
+1.  **Accessing the OMS:** visit the OMS platform at the [OMS Portal](https://restaurant.boltoms.wearyourbrand.co). Log in using your email address and the password provided to you via Slack.
+2.  **Account Support:** if you don't have an account, please raise a ticket for it with Customer Support. If you experience issues with access, or forget your password, please raise a ticket with Customer Support.
+3.  **Familiarizing Yourself with OMS:** explore the [dashboard](https://restaurant.boltoms.wearyourbrand.co/admin/dashboard) to get comfortable with the available metrics and tools.
+
+### **Delivery Metrics**
+
+The Delivery Metrics dashboard provides an overview of the delivery performance for the selected period.
+
+**Section 1: High Level Overview KPI Cards**
+
+|  |  |
+| :-: | :-: |
+| KPI | Definition |
+| **Total Orders** | Number of orders submitted within the selected time period. |
+| **Delivered** | Number of orders delivered within the selected time period. |
+| **Failed** | Number of orders in the selected market and period that were returned to the warehouse after failed delivery attempts. |
+| **Cancelled** | Number of orders (out of the orders submitted within the selected timeframe) manually cancelled before a tracking number was assigned. |
+| **Orders in Progress** | Orders in active statuses (still under processing, or in transit), out of the orders submitted within the selected period. |
+| **Avg. Days Between Dispatch and Delivery** |   - Only delivered orders are counted.&#10;  - The average number of business days between order submission and delivery.&#10;  - Cut-off time is taken into consideration (11:00 AM).&#10;  - First day of delivery is the first business day after the dispatch day.&#10;  - Only orders without shipment errors are included.&#10;  - Includes only orders delivered in the selected market and within the selected period. |
+| **% of SLA Compliance** | The percentage of delivered orders that meet the defined SLA based on submission time:  - Orders submitted before 11:00 AM: SLA is 3 business days from order submission.&#10;  - Orders submitted after 11:00 AM: SLA is 4 business days from order submission.&#10;  - Dispatch day: the dispatch day is considered day 0 and is not counted as the first business day.&#10;  - Exclusions: orders logged with shipment errors are excluded from the calculation.Calculation: this metric reflects how effectively orders are delivered within the agreed service timeframe. |
+| **Shipment Errors Percentage** | The percentage of delivered orders that experienced at least one delivery issue, compared to all delivered orders.  - Counted per order, regardless of how many delivery issues an order may have.&#10;  - Includes only orders placed in the selected market and within the selected period.This metric highlights the proportion of orders affected by delivery problems within the reporting period. |
+
+**Section 2: Delivery Metrics**
+
+In this section, you can find a selection of charts that provide a clear and transparent picture of delivery and fulfillment performance. The charts are interactive.
+
+**1. Order Submission to Dispatch (Excluding and Including Shipment Errors)**
+
+This graph shows the number of orders delivered in the selected market and period, and the number of business days between order creation and dispatch (defined as the date when the tracking number is registered in the system). Only orders without shipment errors prior to receiving a tracking number are included.
+
+*Important: only orders with tracking numbers are counted.*
+
+Categories:
+
+  - **A. Same Day Dispatch (SLA Met):** orders placed before the cut-off time and dispatched on the same day.
+  - **B. Next Business Day (After Cut-off, SLA Met):** orders placed after the cut-off time and dispatched on the next business day.
+  - **C. Next Business Day (Before Cut-off, SLA Missed):** orders placed before the cut-off time but dispatched on the next business day. SLA is considered missed.
+  - **D. Delayed Dispatch (SLA Missed):** orders placed before or after the cut-off time but dispatched in more than one business day. SLA is considered missed.
+
+**Average:** the weighted average number of business days between order creation and dispatch (tracking number registration).
+
+**Within SLA Rate:** the percentage of orders dispatched within SLA (categories A and B) out of all orders counted in the graph.
+
+This metric provides a clear view of dispatch efficiency and SLA compliance. The difference between the two graphs is that one shows orders with no shipment errors logged, whilst the other also includes orders with shipment errors.
+
+**2. Dispatch to Final Completion Date**
+
+This graph shows the number of orders delivered in the selected market and period, along with the number of days between dispatch (tracking number registration) and final delivery.
+
+Important:
+
+  - Only orders that are delivered are counted.
+  - Cut-off times are not considered.
+  - Only delivered orders within the selected market and period are counted.
+  - Days are calculated as the difference between tracking registration date and delivery date. For example, if a tracking number is registered today and delivered tomorrow, it counts as 1 day.
+  - Clicking on the chart opens a popup with the counted order numbers.
+
+**Average:** the weighted average number of days between dispatch (tracking registration) and delivery.
+
+**Calculation:** the total number of days between dispatch and delivery across all counted orders, divided by the number of counted orders.
+
+**Business Days vs Calendar Days:**
+
+  - Users can switch between Business Days and Calendar Days views.
+  - Business Days exclude weekends. For example, an order tracked on Friday and delivered on Monday counts as 1 day.
+  - Calendar Days include weekends. The same order would count as 3 days.
+
+This metric provides insight into delivery performance from dispatch to final completion.
+
+**3. SLA Compliance**
+
+This graph shows the number of orders delivered in the selected market and period, along with the number of days between order submission and final delivery.
+
+Important:
+
+  - All delivered orders are included.
+  - Cut-off times and dispatch day are considered:
+
+<!-- end list -->
+
+1.  Orders submitted before 11:00 AM: the SLA timer starts on the same day the order is submitted.
+2.  Orders submitted after 11:00 AM: the SLA timer starts on the next business day after submission.
+3.  Dispatch day: if the order was submitted before 11:00 AM, the day the order is dispatched (tracking number registered) is considered day 0 and is not counted as the first business day.
+4.  Only orders that are delivered are counted.
+
+<!-- end list -->
+
+  - Only delivered orders within the selected market and period are counted.
+  - Clicking on the chart opens a popup showing the counted orders.
+
+Examples:
+
+  - Order submitted at 10:59 on 01.10.2025 and delivered on 03.10.2025 → counts as 2 days.
+  - Order submitted at 11:01 on 01.10.2025 and delivered on 03.10.2025 → counts as 1 day.
+
+**Average:** weighted average number of days between order submission and delivery, including cut-off time and dispatch-day considerations.
+
+**Calculation:** the total number of days between order submission and delivery across all counted orders (after applying the cut-off time and dispatch-day rules above), divided by the number of counted orders.
+
+**User Filters:**
+
+  - All times of day: includes every order.
+  - Only submitted before 11:00 AM: includes only orders submitted before 11:00 AM.
+  - Only submitted after 11:00 AM: includes only orders submitted after 11:00 AM.
+
+*Note: the system counts all orders that received a delivered status. Orders cancelled after delivery are still included, as SLA compliance is relevant for these orders.*
+
+**4. Order Submission to Final Completion Date (Hours)**
+
+This graph shows the number of orders delivered in the selected market and period, along with the number of hours between order submission and final delivery.
+
+Important:
+
+  - Only delivered orders are included.
+  - Cut-off times are not considered.
+  - Days are converted to hours to measure the total elapsed time between order submission and delivery.
+  - Only delivered orders within the selected market and period are counted.
+  - Clicking on the chart opens a popup showing the counted orders.
+  - Cancelled orders are not included.
+
+Examples:
+
+  - Order submitted at 10:00 today and delivered at 09:59 the next day → shows up as 0-24 hours.
+  - Order submitted at 10:00 today and delivered at 10:01 the next day → shows up as 24-48 hours.
+
+**Business Days vs Calendar Days:**
+
+  - Users can switch between Business Days and Calendar Days views.
+  - Business Days exclude weekends. For example, an order submitted on Friday at 10:00 and delivered on Monday at 09:59 counts as 24 hours.
+  - Calendar Days include weekends. The same order would count as 72 hours.
+
+*Note: the system counts all orders that have received a delivered status. Orders cancelled after delivery are still included, as SLA compliance is relevant for these orders.*
+
+**5. Order Submission to Final Completion Date (Days)**
+
+This graph shows the number of orders delivered in the selected market and period, along with the number of hours between order submission and final delivery.
+
+Important:
+
+  - Only orders that are delivered are counted.
+  - Cut-off times are not considered in this calculation.
+  - Days are converted to hours to measure the total elapsed time between order submission and delivery.
+  - Only delivered orders within the selected market and period are included.
+  - Clicking on the chart opens a popup showing the counted orders.
+
+Examples:
+
+  - Order submitted at 10:00 today and delivered at 09:59 the next day → shows up as 24 hours.
+  - Order submitted at 10:00 today and delivered at 10:01 the next day → shows up as 48 hours.
+
+**Business Days vs Calendar Days:**
+
+  - Users can switch between Business Days and Calendar Days views.
+  - Business Days exclude weekends. For example, an order submitted on Friday at 10:00 and delivered on Monday at 09:59 counts as 24 hours.
+  - Calendar Days include weekends. The same order would count as 72 hours.
+
+*Note: the system counts all orders that have reached a delivered status. Orders cancelled after delivery remain included, as SLA measurement remains applicable for these cases.*
+
+**6. Shipment Errors**
+
+This graph displays all delivered orders that encountered at least one shipment error during their delivery process. Each shipment error type is shown individually, along with the number of orders affected by that specific issue. Clicking on any section of the chart will open a detailed list of the corresponding orders in a popup window.
+
+**Timeframe:** only orders with a delivery date within the selected period (chosen via the date/time picker above) are included.
+
+Note:
+
+  - Shipment Error % = (Number of orders affected by shipment errors ÷ Total number of orders in the market) × 100
+  - An individual order may have multiple shipment error statuses; therefore, a single order can appear under more than one error category in the chart.
+
+**7. KPI Comparison**
+
+This tool lets you compare performance across two different time periods and easily identify any changes or trends. To use it effectively, select the following:
+
+  - Metric to compare (e.g., SLA Compliance, Order Submission to Final Completion Date (hours)). Choose your desired metric from the dropdown menu.
+  - Period 1 (the first time range you want to analyze).
+  - Period 2 (the second time range for comparison).
+
+### **Order Metrics**
+
+The Order Metrics dashboard helps you quickly spot any orders that need your attention.
+
+|  |  |
+| :-: | :-: |
+| KPI | Definition |
+| **Orders Delivered** | Number of orders delivered within the selected time period from the total number of orders placed within the selected period. |
+| **Failed & Cancelled Orders** | Number of orders in the selected market and period that were returned to the warehouse after failed delivery attempts, or cancelled. |
+| **Orders in Progress** | Orders that have not reached a final status (Delivered, Returned, Cancelled) within the selected period. |
+| **Orders to Monitor** |   - Orders in Processing for more than 3 hours.&#10;  - Orders in Forwarded status for more than 24 hours.&#10;  - Orders in Sent or In Transit for over 72 hours.&#10;  - All orders with Available for Pickup or Returned status. |
+
+Orders with an interim status (any status other than "Delivered", "Returned", or "Return Pickup Failed") are force-closed automatically by the system after remaining in the system for more than 60 days. All force-closed orders should be updated to a "Closed" status.
+
+### **Order List**
+
+The Order List provides a complete record of all submitted orders. You can apply various filters and export the data as needed.
+
+**Filters.** You may apply various filters and search by: Order ID, a specific period, consignee, delivery time, status, order type, product, city. Make sure to click "Search" after selecting your filters to apply them to the list.
+
+**Functions**
+
+  - **Export:** exports orders based on the applied filters.
+  - **Quick Overview:** click the eye icon to view a summary of the order details.
+  - **Order Details:** from the eye icon, you can open the full order page to review all information, including comments and status updates associated with the order.
+  - **Reviewed and Escalated by Boolanga CS:** a green person icon indicates that the order is already being handled by Boolanga Customer Support. All relevant information has been logged, and the team is actively following up with the courier and freight forwarder.
+
+The eye icon and person icons can be found in the "Actions" column.
+
+### **Order Details**
+
+This section provides all updates and comments related to an order. Please review the information carefully before escalating, as any logged details here will prevent your escalation from being accepted.
+
+**Main Functions:**
+
+1.  **Order Details:** all details provided when submitting an order are available in this view. This can be helpful when receiving shipment errors related to addresses or merchant contact information. You can review and make the necessary changes in the new order submitted.
+2.  **Status:** the order's progress is tracked here. If a shipment error occurs, Customer Support will log it as a status update, which will then appear here.
+3.  **Status Log:** Customer Support uses the status log to record order information that doesn't count as a shipment error, ensuring the order remains included in SLA calculations. You can also add comments here to document details for historical reference.
+
+### **Manual Status Updates**
+
+Local teams and merchants can now manually mark orders as delivered in real time, allowing them to go live on the app immediately after receiving their device, with no need to wait for the automated update cycle. All it takes is the merchant's email address and the order ID, and the status is updated in real time.
+
+Each market has its own dedicated link:
+
+  - Portugal Bolt Restaurant: [restaurant.pt.boltfoodgear.com/restaurant/delivered](https://restaurant.pt.boltfoodgear.com/restaurant/delivered)
+  - Bulgaria Bolt Restaurant: [bg.boltfoodgear.com/en/restaurant/delivered](https://bg.boltfoodgear.com/en/restaurant/delivered)
+  - Czechia Bolt Restaurant: [cz.boltfoodgear.com/en/restaurant/delivered](https://cz.boltfoodgear.com/en/restaurant/delivered)
+  - Estonia Bolt Restaurant: [ee.boltfoodgear.com/en/restaurant/delivered](http://ee.boltfoodgear.com/en/restaurant/delivered)
+  - Lithuania Bolt Restaurant: [lt.boltfoodgear.com/en/restaurant/delivered](http://lt.boltfoodgear.com/en/restaurant/delivered)
+  - Latvia Bolt Restaurant: [lv.boltfoodgear.com/en/restaurant/delivered](http://lv.boltfoodgear.com/en/restaurant/delivered)
+  - Malta Bolt Restaurant: [boltfoodgearmt.boltfoodgear.com/en/restaurant/delivered](http://boltfoodgearmt.boltfoodgear.com/en/restaurant/delivered)
+  - Poland Bolt Restaurant: [pl.boltfoodgear.com/en/restaurant/delivered](http://pl.boltfoodgear.com/en/restaurant/delivered)
+  - Romania Bolt Restaurant: [ro.boltfoodgear.com/en/restaurant/delivered](http://ro.boltfoodgear.com/en/restaurant/delivered)
+  - Slovakia Bolt Restaurant: [sk.boltfoodgear.com/en/restaurant/delivered](http://sk.boltfoodgear.com/en/restaurant/delivered)
+  - Ukraine Bolt Restaurant: [ua.boltfoodgear.com/en/restaurant/delivered](http://ua.boltfoodgear.com/en/restaurant/delivered)
+
+## **09 · E-shop Guide**
+
+### **1. Purpose & Scope**
+
+This section defines the end-to-end process for procuring Restaurant Supplies using the official Bolt Food Gear E-Shop. It establishes guidelines for:
+
+1.  Promo Code Issuance & Allocation (internal vs. external codes created by Boolanga).
+2.  Order Placement by Bolt merchants directly or by Bolt team members on behalf of merchants.
+3.  Monthly Financial Settlement across e-shop sales revenue and fulfillment costs.
+
+### **2. Discount Code Policy & Roles**
+
+Boolanga generates two distinct categories of discount codes depending on the use case:
+
+|  |  |  |  |
+| :-: | :-: | :-: | :-: |
+| Code type | Originator | Recipient / usage | Primary purpose |
+| **External Discount Code** | Boolanga CS / Ops | Shared directly with Bolt merchants | Merchant self-service order placement with tailored commercial discounts. |
+| **Internal Discount Code** | Boolanga CS / Ops | Used by Bolt internal team members | Assisted order placement when Bolt staff order supplies on behalf of a merchant. |
+
+**Role Breakdown**
+
+|  |  |  |
+| :-: | :-: | :-: |
+| Bolt Merchants | Bolt Internal Staff | Boolanga CS & Finance |
+| Browse restaurant supplies, apply external discount codes, enter delivery/invoicing details, and complete self-service checkout. | Request internal codes from Boolanga CS, manage merchant supply requests, and execute e-shop orders on behalf of merchants. | Issue requested discount codes, process/fulfill supply orders, track e-shop revenue vs. fulfillment expenses, and manage monthly reconciliation. |
+
+### **3. Step-by-Step E-Shop Ordering Procedure (Restaurant Supplies)**
+
+1.  **Obtain Discount Code from Boolanga CS:** request and confirm code validity prior to initiating an order.
+
+<!-- end list -->
+
+1.  Determine whether the order is self-service (merchant) or assisted (Bolt internal staff).
+2.  Contact Boolanga CS with the target Merchant ID and order scope:
+
+<!-- end list -->
+
+  - For merchants: request an External Discount Code to send to the merchant.
+  - For internal staff: request an Internal Discount Code to apply when ordering on behalf of the merchant.
+
+<!-- end list -->
+
+1.  *[Screenshot/image embedded in the original document — not captured by text export]*
+2.  Confirm the discount percentage/value and code validity period before opening the e-shop.
+
+<!-- end list -->
+
+1.  **Navigate to Restaurant Supplies:** filter strictly for restaurant operational materials.
+
+<!-- end list -->
+
+1.  Access the e-shop at <https://bg.boltfoodgear.com/en>.
+2.  From the top navigation bar, click directly on Restaurant Supplies (or visit <https://bg.boltfoodgear.com/en/products/restaurant-supplies>).
+3.  Browse available packaging items, branded tapes, containers, and operational essentials.
+
+<!-- end list -->
+
+1.  **Add Items to Cart:** configure required quantities and specifications.
+
+<!-- end list -->
+
+1.  Select the required supply item and review quantity options or bundle configurations.
+2.  Click Add to Cart.
+3.  Open the cart drawer or click Cart in the header to review selected supply quantities and subtotal.
+
+<!-- end list -->
+
+1.  **Apply Discount Code at Checkout:** apply the relevant internal or external code.
+
+<!-- end list -->
+
+1.  Proceed to the Checkout page.
+2.  Locate the Promo Code / Discount Code field.
+3.  Enter the assigned code:
+
+<!-- end list -->
+
+  - Enter the External Code if the merchant is placing the order.
+  - Enter the Internal Code if Bolt staff is placing the order on behalf of the merchant.
+
+<!-- end list -->
+
+1.  *[Screenshot/image embedded in the original document — not captured by text export]*
+2.  Click Apply and verify that the discount is reflected in the total order value.
+
+<!-- end list -->
+
+1.  **Complete Delivery & Invoice Details:** ensure correct merchant details are recorded.
+
+<!-- end list -->
+
+1.  **Shipping Information:** enter the physical delivery address of the restaurant/merchant outlet.
+2.  **Invoicing / Company Data:** enter the merchant's company legal name, VAT/EIK number, and billing address.
+3.  **Order Confirmation:** review the final balance, select the payment method, and click Place Order.
+4.  Save the order reference number provided in the confirmation screen and email summary.
+
+### **4. Monthly Financial Settlement Process**
+
+Financial settlement between Bolt and Boolanga is conducted on a monthly cycle according to the following framework:
+
+**[Total Gross E-Shop Sales] − [Total Fulfillment Costs] = Net Monthly Balance**
+
+**Key Settlement Guidelines:**
+
+1.  **Gross E-Shop Sales:** includes all order receipts from Restaurant Supplies (less discounts applied via internal/external codes).
+2.  **Fulfillment Costs:** encompasses warehousing, packaging labor, shipping, and handling fees incurred by Boolanga during order dispatch.
+3.  **Monthly Reconciliation:**
+
+<!-- end list -->
+
+  - At the end of each calendar month, Boolanga provides a ledger detailing total e-shop sales revenue versus total fulfillment cost expenditures.
+  - The final settlement invoice or transfer reflects the net balance calculated from these two figures.
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+## **10 · Change Log**
+
+This SOP is a live document. Every change is recorded here, newest first. When you update the SOP, add a row at the top of the table with the date, the section, what changed, who made the change and where it was agreed.
+
+|  |  |  |  |  |
+| :-: | :-: | :-: | :-: | :-: |
+| Date | Section | Change | Changed by | Reference |
+| 19.11.2026 | 02 · Order Submission, 03 · Order Flow | Reorganised section 02: all Ukraine rules are now in one "Ukraine Exceptions" part at the end of the section (delivery and address, field validations, returns, inbound shipments). SKU table reduced to the Sunmi V3 SKU per market. "Remarks" renamed to "Before You Submit". Section 03: removed a repeated intro, courier table sorted by market name. | Hilda Szasz (Boolanga) |   |
+| 19.11.2026 | 01 · Intro | Added three Key Documents: the SKU list, the warehouse activation guidelines and Email Comms: Bolt Food Merchants. | Hilda Szasz (Boolanga) |   |
+| 19.11.2026 | 03 · Order Flow | Added "Merchant Communication": the automatic emails sent to merchants, what triggers them, the order status and who receives them. Some statuses are still to be confirmed. | Hilda Szasz (Boolanga) | [Email Comms: Bolt Food Merchants](https://docs.google.com/document/d/1skxnkpPjAiqile1sjjcjXinoQeneT6v9cf1xTHRJWLk/edit?tab=t.0#heading=h.i8exmzpeylhq) |
+| 19.11.2026 | 03 · Order Flow | Added "Device Activation": the warehouse activation guidelines and the activation status per market. | Hilda Szasz (Boolanga) | [Market tracker\_Activation process](https://docs.google.com/spreadsheets/d/1ScxmwLJOiTnFnTjlkLtEdr3AjHIBEgqJ528-1RGDEPE/edit) |
+| 19.11.2026 | 02 · Order Submission | Added "Bulk Orders" (orders above 20 pieces need approval from Paweł Dąbrowski and Joana Duó) and "Products and SKUs" (Sunmi V3 ready to reuse, Sunmi V3 damaged, Sunmi Return, and SKUs per market). | Hilda Szasz (Boolanga) | [SKU\_Product/Market\_Bolt Mops.](https://docs.google.com/spreadsheets/d/1O_N_pjwUSbWQTENfonHmjgxaOc4-o-Och1Uv8cK7YNc/edit?gid=0#gid=0) |
+| 19.11.2026 | 02 · Order Submission | Shipment Errors table: "Out of stock" cause corrected. Orders for items out of stock in OMS can't be placed, so this error means the warehouse couldn't fulfil an item that showed as in stock. Who fixes it changed from "Bolt (stock)" to "Bolt (new order)". | Hilda Szasz (Boolanga) |   |
+| 19.11.2026 | 02 · Order Submission | Shipment Errors table: "Reshipped" changed from "Boolanga (warehouse)" to "No action" in the Who fixes it column, as no action is needed from either side. | Hilda Szasz (Boolanga) |   |
+| 19.11.2026 | 03 · Order Flow | Renamed "Pick-Up Flow" to "Delivery Flow (all markets)". | Hilda Szasz (Boolanga) |   |
+| 19.11.2026 | 02 · Order Submission | Added "Ukraine: Returns": the merchant receives a notification and drops the tablet off at the closest Nova Poshta branch, with nothing to print or pay. | Hilda Szasz (Boolanga) |   |
+| 19.11.2026 | 02 · Order Submission | Added "Ukraine: Field Validations": Cyrillic only in name and consignee fields, phone format +380 plus 9 digits, 5-digit postal code, no special characters in address and city. Pending activation in OMS. | Hilda Szasz (Boolanga) | Slack \#boolanga-bolt-global-ops, 5 Nov 2026 |
+| 19.11.2026 | 02 · Order Submission | Added "Ukraine: Order Rules": home delivery only, Nova Poshta branch orders and orders without a city are cancelled, inbound shipments must be confirmed with Boolanga in advance. | Hilda Szasz (Boolanga) | Slack \#boolanga-bolt-global-ops, 26 Oct 2026 |
+| 19.11.2026 | 06 · Stock and Inbounding | Added two notes: inbound shipments are reflected in stock within 3 business days of the warehouse confirming receipt, and SKUs in the inbounding sheet must match the actual products. | Hilda Szasz (Boolanga) |   |
+| 18.11.2026 | 03 · Order Flow | Added the delivery flow for all markets: 2 home delivery attempts, exceptions for refused parcels and incorrect addresses, 5 business days at the pick-up location, courier per market table. Updated the order flow and the Available for Pick-Up status from 7 days to 5 business days. | Hilda Szasz (Boolanga) | Boolanga\_Courier Map |
+| 18.11.2026 | 02 · Order Submission | Added the "Shipment Errors" table with the cause, who fixes it and the next step for each error. | Hilda Szasz (Boolanga) | Bolt \<\> Boolanga\_Shipment Errors |
+| 18.11.2026 | 02 · Order Submission | Linked the \#boltfood-boolanga-critical-escalations Slack channel in Order Channels. | Hilda Szasz (Boolanga) |   |
+
+  </script>
+<script>
+(() => {
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const SOP = $("sop-src").textContent;
+
+/* ---------- Contacts: only channels named in the SOP ---------- */
+const OMS = "https://restaurant.boltoms.wearyourbrand.co/login";
+const CONTACTS = {
+  oms_comment: { name: "Comment on the order in OMS", url: OMS, link: "Open OMS",
+    when: "Cancellations, address questions and anything about one specific order. Customer Support reads order comments and keeps the history there." },
+  ticket: { name: "Submit a ticket to Boolanga Customer Support", url: "https://forms.zohopublic.eu/boolanga/form/BoltFoodBoolangaSupport/formperma/-2JW6qirerPsLZhUgeZjUKFKwubfNeBfeGp1pa9yDAo", link: "Open the ticket form",
+    when: "Orders out of SLA, Processing over 24 hours with no error, lost or damaged parcels, OMS login requests, technical or stock questions. Use \"0\" as order and case ID for non-order requests." },
+  slack_escalations: { name: "#boltfood-boolanga-critical-escalations", url: "https://boolanga.slack.com/archives/C090Y0PTB1C", link: "Open the Slack channel",
+    when: "Critical escalations. New tickets and daily updates on open tickets are posted here." },
+  inbounding: { name: "Inbounding sheet", url: "https://docs.google.com/spreadsheets/d/16DB060LN6C2h3vZrYAWBSMz1QSrwcACZa5RbO97AjJM/edit?gid=1128162749#gid=1128162749", link: "Open the inbounding sheet",
+    when: "Announce shipments to the warehouse at least 2 business days ahead in your country tab, then tag ff@boolanga.com. Ukraine: confirm the shipment with Boolanga first." },
+  manual_status: { name: "Manual delivered-status link for your market", url: "", link: "",
+    when: "Tracking shows Delivered but OMS hasn't updated yet. You need the merchant's email and the order ID. The links per market are in SOP section 08." },
+  none: null
+};
+const TOPICS = ["OMS Boolanga Dashboard – Login Request", "Lost / Damaged Package", "Operational / Technical Issues", "Status Update on Delayed Orders", "Order Inquiry"];
+
+/* ---------- Shipment errors, grouped by whether Bolt needs to act ---------- */
+const ACT = [
+  ["Wrong address", "Incorrect city, zip code or street name, or the restaurant can't be found in the area.", "Create a new order with the correct address. The original order is cancelled, or returned if already sent."],
+  ["Insufficient address", "House or apartment number missing, or no instructions for an address inside a large building or shopping mall.", "Cancel the order and create a new one with the complete address, including shop number and location for malls."],
+  ["Incorrect receiver details", "Incorrect phone number, or the shop name is different from the one on the order.", "Cancel the order and create a new one with the correct phone number and shop name."],
+  ["Redirection", "The address was incorrect and the parcel was redirected. If the new address is in another city, delivery can take up to one more week.", "The parcel is being returned. Create a new order with the correct data."],
+  ["Recipient not available", "The restaurant was closed, nobody knew about the package, or the recipient didn't answer the courier's call.", "Contact the merchant so someone is there for the next delivery attempt."],
+  ["Refused", "The recipient didn't accept the delivery.", "The parcel goes back to the warehouse with no second attempt. Create a new order if the merchant still needs the device."],
+  ["Pick-up point", "Home delivery failed, or the recipient asked to collect the parcel at a pick-up point.", "Make sure the merchant collects the parcel within 5 business days, or it goes back to the warehouse."],
+  ["Out of stock", "The item showed as in stock in OMS, but the warehouse couldn't fulfil the order, for example because of a stock discrepancy. Orders for items that are out of stock in OMS can't be placed at all.", "The order is cancelled. Create a new order with an item that's in stock."]
+];
+const OK = [
+  ["Technical issue", "An OMS, warehouse (label printing, system) or courier (hub processing, faded label) problem.", "Boolanga solves it with the warehouse or courier. You only act if Customer Support asks you to place a new order."],
+  ["Reshipped", "The warehouse sent a new parcel for the same order and created a new tracking number.", "Nothing to do. Follow the order with the new tracking number."],
+  ["Stock taking", "The warehouse's yearly inventory count delays dispatch.", "Nothing to do. Dispatch continues after the count."],
+  ["Bank holiday", "A bank holiday delays dispatch or delivery. It's logged on the order automatically.", "Nothing to do."],
+  ["Transit delay", "The courier is delayed moving the parcel between hubs. Only logged in peak periods or exceptional weather.", "Nothing to do. Escalate only if the order goes past its SLA."]
+];
+const errItem = ([name, cause, todo]) => `<details class="err"><summary>${esc(name)}</summary><div class="b">
+  <p><span class="k">Cause</span>${esc(cause)}</p><p><span class="k">What to do</span>${esc(todo)}</p></div></details>`;
+$("actList").innerHTML = ACT.map(errItem).join(""); $("actCount").textContent = ACT.length;
+$("okList").innerHTML = OK.map(errItem).join(""); $("okCount").textContent = OK.length;
+
+/* ---------- Key timelines (SOP sections 03, 05, 06) ---------- */
+const FACTS = [
+  ["3 / 4 days", "Delivery SLA: 3 business days for orders placed before 11:00, 4 business days after 11:00. The order day counts as day 0."],
+  ["24 hours", "Normal time in Processing. Over 24 hours with no error logged in OMS: submit a ticket."],
+  ["6 hours", "Normal delay before a Delivered status reaches OMS / Salesforce. Use the manual status link if you need it sooner."],
+  ["2 attempts", "Home delivery attempts before the parcel goes to a pick-up point. No second attempt if the parcel is refused."],
+  ["5 days", "Business days a parcel waits at the pick-up point before it goes back to the warehouse."],
+  ["2 days ahead", "Announce inbound shipments in the inbounding sheet at least 2 business days before arrival."],
+  ["3 days", "Business days to see an inbound shipment in stock after the warehouse confirms receipt."]
+];
+$("facts").innerHTML = FACTS.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("");
+$("dir").innerHTML = ["oms_comment", "ticket", "slack_escalations", "inbounding"].map(k => {
+  const c = CONTACTS[k]; return `<li><span class="k"><a href="${c.url}" target="_blank" rel="noopener">${esc(c.name)}</a></span><span class="v">${esc(c.when)}</span></li>`;
+}).join("");
+
+const TOOLS = [
+  ["Restaurant OMS", "Place and track orders for restaurants", OMS],
+  ["Retail OMS", "Place and track orders for retail", "https://retail.boltoms.wearyourbrand.co/admin/dashboard"],
+  ["SOP document", "The full process, kept up to date", "https://docs.google.com/document/d/1M0tS7Z5jpwW5cpasNBO7aPwXBG_QWajDUfOte6Apyak/edit?tab=t.0"],
+  ["Support ticket form", "OMS access, delays, lost parcels", CONTACTS.ticket.url]
+];
+$("tools").innerHTML = TOOLS.map(([t, d, u]) => `<li><a href="${u}" target="_blank" rel="noopener"><span><span class="t">${esc(t)}</span><span class="d">${esc(d)}</span></span><span class="arr" aria-hidden="true">↗</span></a></li>`).join("");
+
+const EXAMPLES = ["Which product do I select for a return?", "Who approves a bulk order?", "Order stuck in Processing for over a day", "Cancel an order that's already Sent", "Merchant refused the parcel", "Tracking says delivered but OMS doesn't", "Send tablets to the warehouse", "Ukraine order rules"];
+$("chips").insertAdjacentHTML("beforeend", EXAMPLES.map(e => `<button type="button" class="chip">${esc(e)}</button>`).join(""));
+$("chips").addEventListener("click", (e) => { const b = e.target.closest(".chip"); if (!b) return; $("q").value = b.textContent; ask(); });
+
+/* ---------- Minimal markdown renderer ---------- */
+function inline(s) {
+  let t = esc(s);
+  t = t.replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, (m, a, u) => `<a href="${u}" target="_blank" rel="noopener">${a}</a>`);
+  t = t.replace(/\[([^\]]+)\]\(mailto:[^)\s]+\)/g, "$1");
+  t = t.replace(/&lt;(https?:[^&\s]+)&gt;/g, (m, u) => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+  t = t.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  return t;
+}
+function md(src) {
+  const lines = src.split("\n"); let out = ""; let i = 0;
+  while (i < lines.length) {
+    const l = lines[i];
+    if (/^\|/.test(l)) {
+      const rows = []; while (i < lines.length && /^\|/.test(lines[i])) { rows.push(lines[i]); i++; }
+      const cells = rows.filter(r => !/^\|\s*:?-/.test(r)).map(r => r.replace(/^\||\|$/g, "").split("|").map(c => c.trim())).filter(r => r.some(c => c));
+      if (!cells.length) continue;
+      const [h, ...b] = cells;
+      out += `<div class="tablewrap"><table><thead><tr>${h.map(c => `<th>${inline(c)}</th>`).join("")}</tr></thead><tbody>` +
+        b.map(r => `<tr>${r.map(c => `<td>${inline(c).replace(/ {3,}- /g, "<br>• ").replace(/ {3,}/g, "<br>")}</td>`).join("")}</tr>`).join("") + `</tbody></table></div>`;
+      continue;
+    }
+    if (/^\s*(-|\d+\.)\s+/.test(l)) {
+      const items = []; while (i < lines.length && /^\s*(-|\d+\.)\s+/.test(lines[i])) { items.push(lines[i].replace(/^\s*(-|\d+\.)\s+/, "")); i++; }
+      out += `<ul>${items.map(x => `<li>${inline(x)}</li>`).join("")}</ul>`; continue;
+    }
+    if (/^#{3,}\s/.test(l)) { out += `<h4>${inline(l.replace(/^#+\s*/, "").replace(/\*\*/g, ""))}</h4>`; i++; continue; }
+    if (l.trim()) out += `<p>${inline(l)}</p>`;
+    i++;
+  }
+  return out;
+}
+
+/* ---------- SOP search ---------- */
+const SECTIONS = (() => {
+  const parts = []; let cur = null;
+  for (const l of SOP.split("\n")) {
+    const h2 = l.match(/^##\s+\*{0,2}(\d\d)\s*·\s*(.+?)\*{0,2}\s*$/);
+    const h3 = l.match(/^###\s+\*{0,2}(.+?)\*{0,2}\s*$/);
+    if (h2) { cur = { num: h2[1], parent: h2[2], title: h2[2], text: "" }; parts.push(cur); continue; }
+    if (h3 && cur) { cur = { num: cur.num, parent: cur.parent, title: h3[1], text: "" }; parts.push(cur); continue; }
+    const hb = l.match(/^\*\*((?:\d+\.|Section \d+:)[^*]{3,90})\*\*\s*$/);
+    if (hb && cur && cur.num === "08") { cur = { num: cur.num, parent: cur.parent, title: hb[1].trim(), text: "" }; parts.push(cur); continue; }
+    if (cur) cur.text += l + "\n";
+  }
+  return parts.filter(p => p.text.trim().length > 30 && p.num !== "10");
+})();
+const STOP = new Set("a an the and or of to in on for is are be it my our we i do does how what when where why which with at from that this can should order orders".split(" "));
+const words = (s) => (s.toLowerCase().match(/[\p{L}\p{N}-]{2,}/gu) || []).filter(w => !STOP.has(w));
+const STEM = (w) => w.length > 5 ? w.slice(0, -2) : w;
+for (const s of SECTIONS) { s.hay = (s.title + " " + s.text).toLowerCase(); s.th = s.title.toLowerCase(); }
+const DF = new Map();
+function idf(st) { if (!DF.has(st)) DF.set(st, SECTIONS.filter(s => s.hay.includes(st)).length); return Math.log(1 + SECTIONS.length / (1 + DF.get(st))); }
+function search(q, n = 3) {
+  const qs = [...new Set(words(q))]; if (!qs.length) return [];
+  return SECTIONS.map(s => {
+    let score = 0;
+    for (const w of qs) { const st = STEM(w); const m = s.hay.split(st).length - 1; if (!m) continue;
+      score += idf(st) * (1 + Math.log(m)) + (s.th.includes(st) ? 2 * idf(st) : 0); }
+    return { s, score: score / Math.sqrt(1 + s.text.length / 2500) };
+  }).filter(x => x.score > 0).sort((a, b) => b.score - a.score).slice(0, n).map(x => ({ ...x.s, qs }));
+}
+function snippet(text, qs) {
+  const flat = text.replace(/\|/g, " ").replace(/[*#]/g, "").replace(/\s+/g, " ");
+  const low = flat.toLowerCase(); let at = -1;
+  for (const w of qs) { at = low.indexOf(STEM(w)); if (at >= 0) break; }
+  const start = Math.max(0, at - 60);
+  let h = esc((start ? "…" : "") + flat.slice(start, start + 200) + "…");
+  for (const w of qs) { const st = esc(STEM(w)).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); h = h.replace(new RegExp(`(${st}[\\p{L}]*)`, "giu"), "<mark>$1</mark>"); }
+  return h;
+}
+function renderExcerpts(q) {
+  const hits = search(q);
+  $("excerpts").hidden = !hits.length;
+  $("excerptList").innerHTML = hits.map((h, k) => `
+    <details class="sec"${k === 0 && !sample && h.text.length < 4000 ? " open" : ""}>
+      <summary><span class="num">${esc(h.num)}</span><span>${esc(h.title === h.parent ? h.title : h.parent + " · " + h.title)}</span></summary>
+      <div class="snippet">${snippet(h.text, h.qs)}</div>
+      <div class="body md">${md(h.text)}</div>
+    </details>`).join("");
+}
+
+function contactCard(key, topic, extra) {
+  const c = CONTACTS[key]; if (!c) return "";
+  return `<div class="contact"><div class="label">Who to contact</div><div class="name">${esc(c.name)}</div>
+    <p>${esc(c.when)}</p>${topic ? `<p><strong>Ticket topic:</strong> ${esc(topic)}</p>` : ""}${extra ? `<p>${esc(extra)}</p>` : ""}
+    ${c.url ? `<p><a href="${c.url}" target="_blank" rel="noopener">${esc(c.link)} ↗</a></p>` : ""}</div>`;
+}
+
+/* ---------- Claude + db wiring ---------- */
+let sample = null, db = null, user = null, uid = null, ctl = null, lastQ = "", lastAnswer = null;
+(async () => {
+  if (!window.claude?.use) return;
+  [sample, db, user] = await Promise.all([claude.use("sample"), claude.use("db"), claude.use("user")]);
+  if (!sample) $("modeHint").textContent = "Showing matching SOP sections. Sign in to Claude to get written answers.";
+  if (user) { try { uid = await user.id(); } catch { uid = null; } }
+  let admin = false; try { admin = !!(user && await user.canEdit()); } catch {}
+  if (admin && db) startOwnerPanel();
+})();
+
+function buildPrompt(q) {
+  const contacts = Object.entries(CONTACTS).filter(([, v]) => v).map(([k, v]) => `- ${k}: ${v.name}. Use for: ${v.when}`).join("\n");
+  return `You are the help desk for Bolt Food team members who order onboarding devices (tablets, gear) through Boolanga. Answer ONLY from the SOP below. If the SOP does not cover the question, say so and do not guess.
+
+Rules:
+- Reply in the language the question is written in.
+- Be direct and practical. Write for a busy local ops person.
+- Pick the single best contact from the list. Use "none" only if the SOP answer fully solves it and nobody needs to be contacted.
+- If the best contact is "ticket", also pick the ticket topic from: ${TOPICS.join("; ")}.
+- Never invent links, names, emails or deadlines that are not in the SOP.
+- Never send the user to #boolanga-bolt-global-ops. That channel is only for the central Bolt and Boolanga team, not for local team members.
+
+Contacts:
+${contacts}
+
+Reply with ONLY one JSON object, no other text:
+{"covered": true|false, "summary": "1-3 sentence answer", "steps": ["short step", "..."], "section": "SOP section number and name, e.g. 03 · Order Flow", "contact": "one contact key", "ticket_topic": "topic or empty string", "include": "what to put in the message or ticket, or empty string"}
+
+SOP:
+"""
+${SOP}
+"""
+
+Question or issue from a Bolt team member:
+"""
+${q}
+"""`;
+}
+
+async function ask() {
+  const q = $("q").value.trim(); if (!q) { $("q").focus(); return; }
+  lastQ = q; lastAnswer = null;
+  renderExcerpts(q);
+  const box = $("answer"); box.hidden = false;
+  if (!sample) {
+    box.innerHTML = `<span class="status st-info">From the SOP</span>
+      <p class="summary">Here are the SOP sections that match your question. Open one to read the full text.</p>
+      ${contactCard("oms_comment", "", "Still stuck? For questions about one order, comment on it in OMS. For anything out of SLA, submit a ticket.")}`;
+    return;
+  }
+  ctl?.abort(); ctl = new AbortController();
+  $("askBtn").disabled = true; $("stopBtn").hidden = false;
+  box.innerHTML = `<div class="thinking"><span class="dot"></span>Checking the SOP…</div>`;
+  try {
+    const a = await sample.json(buildPrompt(q), { signal: ctl.signal, modelTier: "default", effort: "low" });
+    lastAnswer = a; renderAnswer(a);
+    if (a && a.covered === false) logGap(q, "not_covered", a.section);
+  } catch (e) {
+    const msg = {
+      cancelled: "Stopped.",
+      not_granted: "Written answers are turned off for this page. The matching SOP sections are below.",
+      sampling_disabled: "Written answers aren't available for your account. The matching SOP sections are below.",
+      rate_limited: "Too many questions in a short time. Wait a minute and try again.",
+      session_expired: "Your Claude session expired. Sign in again and retry.",
+      invalid_json: "The answer came back in the wrong format. Try again, or rephrase the question.",
+      refused: "That question couldn't be answered. Try rephrasing it."
+    }[e?.code] || "Something went wrong getting an answer. Try again in a moment. The matching SOP sections are below.";
+    if (e?.code === "not_granted" || e?.code === "sampling_disabled") { sample = null; $("modeHint").textContent = "Showing matching SOP sections."; }
+    box.innerHTML = `<p class="summary">${esc(msg)}</p>`;
+  } finally { $("askBtn").disabled = false; $("stopBtn").hidden = true; }
+}
+
+function renderAnswer(a) {
+  const covered = a?.covered !== false;
+  const steps = Array.isArray(a?.steps) ? a.steps.filter(Boolean).slice(0, 8) : [];
+  const key = CONTACTS[a?.contact] ? a.contact : (covered ? "none" : "ticket");
+  const ticketText = (key === "ticket" || !covered) ? `Topic: ${a?.ticket_topic || "Operational / Technical Issues"}\nIssue: ${lastQ}${a?.include ? "\nDetails to add: " + a.include : ""}` : "";
+  $("answer").innerHTML = `
+    <span class="status ${covered ? "st-ok" : "st-warn"}">${covered ? "Answered from the SOP" : "Not covered in the SOP"}</span>
+    <p class="summary">${esc(a?.summary || "")}</p>
+    ${steps.length ? `<ol class="steps">${steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>` : ""}
+    ${a?.section ? `<div class="meta">Source: SOP ${esc(a.section)}</div>` : ""}
+    ${contactCard(key, key === "ticket" ? a?.ticket_topic : "", a?.include ? "Include: " + a.include : "")}
+    ${ticketText ? `<div class="copybox" id="ticketText">${esc(ticketText)}</div>
+      <div class="row" style="margin-top:8px"><button type="button" class="btn-ghost" id="copyBtn">Copy ticket text</button><span class="note" id="copyNote"></span></div>` : ""}
+    <div class="feedback" id="fb">${covered ? `<div class="row"><span class="note">Did this solve it?</span>
+      <button type="button" class="btn-ghost" data-fb="yes">Yes</button><button type="button" class="btn-ghost" data-fb="no">No</button></div>` :
+      `<span class="note">${db && uid ? "Your question was saved so the SOP can be updated." : ""}</span>`}</div>`;
+  $("copyBtn")?.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText($("ticketText").textContent); $("copyNote").textContent = "Copied"; }
+    catch { const r = document.createRange(); r.selectNodeContents($("ticketText")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $("copyNote").textContent = "Selected. Press Ctrl+C / ⌘C."; }
+  });
+  $("fb")?.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-fb]"); if (!b) return;
+    if (b.dataset.fb === "no") {
+      logGap(lastQ, "not_helpful", lastAnswer?.section);
+      $("fb").innerHTML = `<p class="note" style="margin:0 0 4px">Thanks. ${db && uid ? "Your question was saved for review. " : ""}Here's where to get help:</p>` +
+        contactCard(lastAnswer?.contact === "none" || !CONTACTS[lastAnswer?.contact] ? "ticket" : lastAnswer.contact, lastAnswer?.ticket_topic || "", "");
+    } else { $("fb").innerHTML = `<p class="note" style="margin:0">Good to hear.</p>`; }
+  });
+}
+
+/* ---------- Gap log ---------- */
+let writing = Promise.resolve();
+function logGap(q, reason, section) {
+  if (!db || !uid) return;
+  writing = writing.then(async () => {
+    try {
+      const ref = db.doc("gaps/" + uid);
+      const snap = await ref.get();
+      const entries = (snap.exists && Array.isArray(snap.data().entries)) ? snap.data().entries.slice(-99) : [];
+      entries.push({ q: q.slice(0, 1000), reason, section: String(section || "").slice(0, 80), at: new Date().toISOString() });
+      await ref.set({ entries });
+    } catch { /* best-effort */ }
+  });
+}
+function startOwnerPanel() {
+  $("owner").hidden = false;
+  let loaded = false;
+  const timer = setTimeout(() => { if (!loaded) $("gapList").innerHTML = `<p class="note">Saved questions can't be reached right now.</p>`; }, 10000);
+  db.collection("gaps").onSnapshot(async (snap) => {
+    loaded = true; clearTimeout(timer);
+    const all = [];
+    for (const d of snap.docs) { const ents = d.data()?.entries; if (Array.isArray(ents)) ents.forEach(e => all.push({ ...e, who: d.id })); }
+    all.sort((a, b) => String(b.at).localeCompare(String(a.at)));
+    $("gapCount").textContent = all.length ? `(${all.length})` : "";
+    if (!all.length) { $("gapList").innerHTML = `<p class="note">No saved questions yet. Questions the SOP can't answer will show up here.</p>`; return; }
+    let names = {}; try { names = await user.profiles([...new Set(all.map(a => a.who))]); } catch {}
+    $("gapList").innerHTML = all.slice(0, 60).map(g => `<div class="gap"><div class="q">${esc(g.q)}</div>
+      <div class="m"><span>${esc(names[g.who]?.name || "Someone")}</span><span>${esc(new Date(g.at).toLocaleDateString())}</span>
+      <span>${g.reason === "not_covered" ? "Not in SOP" : "Marked not helpful"}</span>
+      <button type="button" class="linkbtn" data-who="${esc(g.who)}" data-at="${esc(g.at)}">Mark reviewed</button></div></div>`).join("");
+  }, () => { loaded = true; clearTimeout(timer); $("gapList").innerHTML = `<p class="note">Saved questions can't be loaded.</p>`; });
+  $("gapList").addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-who]"); if (!b) return; b.disabled = true;
+    try {
+      const ref = db.doc("gaps/" + b.dataset.who); const s = await ref.get();
+      await ref.set({ entries: (s.data()?.entries || []).filter(x => x.at !== b.dataset.at) });
+    } catch { b.disabled = false; }
+  });
+}
+
+$("askForm").addEventListener("submit", (e) => { e.preventDefault(); ask(); });
+$("q").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); ask(); } });
+$("stopBtn").addEventListener("click", () => ctl?.abort());
+})();
+</script>
+
+</body></html>
