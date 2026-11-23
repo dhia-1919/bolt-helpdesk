@@ -1,5 +1,4 @@
-<!doctype html>
-<html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Asset Delivery Help Desk</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,6 +145,11 @@ ul.dir .v { color: var(--muted); font-size: 13.5px; }
 .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
 .onboard h2 { margin-top: 4px; }
 .ob-lead { margin: 10px 0 0; max-width: 60ch; }
+.ob-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+@media (max-width: 520px) { .ob-stats { grid-template-columns: minmax(0, 1fr); } }
+.ob-stats > div { background: var(--brand); color: var(--brand-ink); border-radius: 12px; padding: 12px 14px; }
+.ob-stats b { display: block; font-family: var(--display); font-size: 26px; line-height: 1.1; color: var(--lime); }
+.ob-stats span { font-size: 12.5px; color: var(--brand-muted); }
 .ob-list { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
 .ob-list li { position: relative; padding-left: 20px; font-size: 14.5px; }
 .ob-list li::before { content: ""; position: absolute; left: 2px; top: .6em; width: 7px; height: 7px; border-radius: 2px; background: var(--accent); }
@@ -159,6 +163,45 @@ ul.tools .t { font-weight: 600; display: block; }
 ul.tools .d { font-size: 12.5px; color: var(--muted); display: block; }
 ul.tools .arr { color: var(--accent); font-weight: 700; flex: none; }
 ol.first { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14px; }
+
+/* Market, news, calculator */
+.askhead { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.askhead > label { margin-bottom: 0 !important; }
+.mkt { display: flex; align-items: center; gap: 8px; }
+.ask .mkt label { font-size: 13px; font-weight: 500; margin: 0; color: var(--muted); }
+select, .calc input { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+.marketcard { background: var(--sunk); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px 16px; font-size: 13.5px; }
+.marketcard[hidden] { display: none; }
+.marketcard .k { display: block; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.marketcard .wide { grid-column: 1 / -1; }
+ul.news { list-style: none; padding: 0; margin: 12px 0 0; }
+ul.news li { padding: 9px 0; border-top: 1px solid var(--line); font-size: 14px; }
+ul.news li:first-child { border-top: 0; }
+ul.news .d { font-size: 12px; color: var(--muted); display: block; }
+.calc { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.calc label { display: grid; gap: 4px; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.calcout { margin-top: 8px; font-size: 14px; }
+.calcout b { font-family: var(--display); color: var(--accent); font-size: 17px; }
+/* Answer extras */
+h3.sub { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 16px 0 0; }
+.missing { margin: 12px 0 0; font-size: 14px; background: var(--act-soft); border: 1px solid var(--act-line); border-radius: 8px; padding: 8px 12px; }
+/* Owner stats */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 560px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.kpis > div { background: var(--sunk); border-radius: 10px; padding: 10px 12px; }
+.kpis b { display: block; font-family: var(--display); font-size: 22px; color: var(--accent); }
+.kpis span { font-size: 12.5px; color: var(--muted); }
+.bars { display: grid; gap: 6px; margin-top: 8px; }
+.bar { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr) 2.5em; gap: 10px; align-items: center; background: none; border: 1px solid transparent; border-radius: 8px; padding: 5px 8px; text-align: left; font-weight: 500; color: var(--ink); }
+.bar:hover, .bar.on { border-color: var(--line); background: var(--sunk); }
+.bar .bl { font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar .bt { height: 10px; background: var(--sunk); border-radius: 999px; overflow: hidden; }
+.bar .bt span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+.bar .bv { font-variant-numeric: tabular-nums; text-align: right; font-size: 13px; color: var(--muted); }
+.pill { background: var(--surface); border: 1px solid var(--line); color: var(--ink); padding: 6px 10px; font-size: 12.5px; font-weight: 500; border-radius: 999px; }
+.pill.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.gap .tag { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 1px 8px; font-weight: 600; }
+.gap .miss { font-size: 13px; color: var(--muted); }
 
 /* Owner panel */
 .owner[hidden] { display: none; }
@@ -185,15 +228,21 @@ footer { color: var(--muted); font-size: 12px; text-align: center; }
     <div class="ob-grid">
       <div>
         <span class="eyebrow">Start here</span>
-        <h2 id="obTitle">What Boolanga does for Bolt</h2>
-        <p class="ob-lead">Boolanga runs the logistics behind merchant onboarding. When a new restaurant or store joins Bolt, Boolanga makes sure the right devices and onboarding items reach them, and takes them back when they leave.</p>
+        <h2 id="obTitle">Boolanga runs merchant asset delivery for Bolt</h2>
+        <p class="ob-lead">A new restaurant or store can't go live with Bolt until its tablet and onboarding kit arrive and work. Boolanga makes that happen in 11 markets, from the warehouse shelf to the merchant's counter and back again. Every order you place goes through us, so getting it right here is what keeps onboarding on schedule.</p>
+        <div class="ob-stats">
+          <div><b>11</b><span>markets with local warehouses and couriers</span></div>
+          <div><b>3 to 4</b><span>business days from order to delivery</span></div>
+          <div><b>1</b><span>system for orders, stock and tracking</span></div>
+        </div>
         <ul class="ob-list">
-          <li><strong>Stores your stock</strong> in local warehouses: Sunmi V3 tablets, SIM cards, tabletops and stickers.</li>
-          <li><strong>Ships to merchants</strong> from the orders you place in OMS, and tracks every parcel to delivery.</li>
-          <li><strong>Activates devices</strong> in the markets where activation is still needed.</li>
-          <li><strong>Handles exchanges and returns</strong>, including refurbishing used devices so they can be sent out again.</li>
-          <li><strong>Runs OMS</strong>, where you place orders and see stock and delivery status.</li>
-          <li><strong>Supports you</strong> through Customer Support tickets and the shared Slack channels.</li>
+          <li><strong>Holds Bolt's stock in every market:</strong> Sunmi V3 tablets, SIM cards, tabletops and stickers, ready to ship the same day.</li>
+          <li><strong>Delivers to merchants on a set SLA</strong> with a local courier in each market, and follows every parcel until it's delivered.</li>
+          <li><strong>Activates devices</strong> before they ship in the markets that still need it, so merchants can start straight away.</li>
+          <li><strong>Manages the full device lifecycle:</strong> replaces faulty devices, collects devices when merchants leave, and refurbishes used tablets so they go back into stock instead of being bought new.</li>
+          <li><strong>Runs OMS</strong>, where you place orders and see live stock, order status, SLA compliance and delivery times per market.</li>
+          <li><strong>Runs the Bolt Food Gear e-shop</strong> where merchants order restaurant supplies.</li>
+          <li><strong>Solves problems for you:</strong> Customer Support handles tickets, works with the warehouses and couriers, and escalates critical cases.</li>
         </ul>
       </div>
       <div class="ob-side">
@@ -210,7 +259,12 @@ footer { color: var(--muted); font-size: 12px; text-align: center; }
   </section>
 
   <form class="card ask" id="askForm" autocomplete="off">
-    <label for="q">What do you need help with?</label>
+    <div class="askhead">
+      <label for="q">What do you need help with?</label>
+      <div class="mkt"><label for="market" class="note">Your market</label>
+        <select id="market"><option value="">All markets</option></select></div>
+    </div>
+    <div id="marketCard" class="marketcard" hidden></div>
     <textarea id="q" placeholder="e.g. My order has been in Processing since yesterday and has no error. What should I do?"></textarea>
     <div class="chips" id="chips"><span class="lbl">Try:</span></div>
     <div class="row bottom">
@@ -225,9 +279,32 @@ footer { color: var(--muted); font-size: 12px; text-align: center; }
   <section class="card answer" id="answer" hidden aria-live="polite"></section>
 
   <section id="excerpts" hidden>
-    <h2>Related SOP sections</h2>
+    <h2 id="excerptTitle">Related SOP sections</h2>
     <div id="excerptList"></div>
   </section>
+
+  <div class="duo">
+    <section class="card">
+      <h2>What's new in the SOP</h2>
+      <p class="hint">The latest changes. The full list is in the change log, SOP section 10.</p>
+      <ul class="news" id="news"></ul>
+      <p class="note" style="margin:10px 0 0"><a href="https://docs.google.com/document/d/1M0tS7Z5jpwW5cpasNBO7aPwXBG_QWajDUfOte6Apyak/edit?tab=t.0" target="_blank" rel="noopener">Open the SOP ↗</a></p>
+    </section>
+    <section class="card">
+      <h2>Delivery date check</h2>
+      <p class="hint">OMS shows the expected delivery date on each order. Use this for a quick check before an order exists, or to see if an order is out of SLA.</p>
+      <div class="calc">
+        <label>Order placed<input type="date" id="cDate"></label>
+        <label>Time<input type="time" id="cTime" value="10:00"></label>
+      </div>
+      <div class="calcout" id="cOut"></div>
+      <div class="calc" style="margin-top:12px">
+        <label>At pick-up point since<input type="date" id="pDate"></label>
+      </div>
+      <div class="calcout" id="pOut"></div>
+      <p class="note" style="margin:10px 0 0">Business days only (Mon to Fri). Public holidays aren't counted here, so check for a "Bank holiday" note in OMS.</p>
+    </section>
+  </div>
 
   <section class="card">
     <div class="section-head">
@@ -254,9 +331,16 @@ footer { color: var(--muted); font-size: 12px; text-align: center; }
   </div>
 
   <section class="card owner" id="owner" hidden>
-    <h2>Questions to review <span class="note" id="gapCount"></span></h2>
-    <p class="hint">Only you and editors see this: questions the SOP didn't answer, and answers marked as not helpful.</p>
-    <div id="gapList" style="margin-top:10px"><p class="note">Loading…</p></div>
+    <div class="section-head">
+      <div>
+        <h2>Questions to review <span class="note" id="gapCount"></span></h2>
+        <p class="hint">Only you and editors see this. Questions the SOP couldn't fully answer, and answers marked not helpful, grouped by topic. Click a topic to filter.</p>
+      </div>
+      <div class="row"><span id="periodSel" class="row"></span><button type="button" class="btn-ghost" id="exportBtn">Export CSV</button></div>
+    </div>
+    <div id="gapStats"></div>
+    <div id="gapList" style="margin-top:14px"><p class="note">Loading…</p></div>
+    <textarea id="csvOut" hidden readonly style="margin-top:10px;min-height:120px;font-size:12px"></textarea><p class="note" id="csvNote"></p>
   </section>
 
   <footer>Based on the SOP "Bolt Food: Asset Delivery with Boolanga". If an answer conflicts with the SOP document, the document applies.</footer>
@@ -271,8 +355,6 @@ Prepared in partnership with Bolt Food · Boolanga Business
   
 
 ### **Contents**
-
-  
 
 1.  Intro
 2.  Order Submission & Required Data
@@ -289,7 +371,11 @@ Prepared in partnership with Bolt Food · Boolanga Business
 
 This SOP encompasses the process of asset delivery management for Bolt Food in collaboration with Boolanga. It defines the standardized workflow for submitting, processing, and fulfilling onboarding asset delivery requests to ensure seamless operations, high efficiency, and precision in order execution.
 
+  
+
 [Boolanga OMS](https://restaurant.boltoms.wearyourbrand.co/login): for user requests, please submit a customer support request as described in section 05.
+
+[Asset Delivery Help Desk](https://bolt-helpdesk.boolanga.com/): ask a question or describe an issue and get the answer from this SOP, plus who to contact if you still need help. New team members can start here for an overview of what Boolanga does for Bolt and the tools you'll use.
 
 ### **Key Objectives**
 
@@ -356,6 +442,11 @@ Besides new devices, OMS has three Sunmi V3 products for used and returned devic
   - **Sunmi V3 damaged:** faulty devices, ready to be disposed of.
   - **Sunmi Return:** the product to select when you submit a return order. Once the device is back at the warehouse, the warehouse refurbishes it if possible and puts it on the correct stock.
 
+  
+  
+  
+  
+
 **Sunmi V3 SKU per market (all products and SKUs are in** [**SKU_Product/Market_Bolt Mops.**](https://docs.google.com/spreadsheets/d/1O_N_pjwUSbWQTENfonHmjgxaOc4-o-Och1Uv8cK7YNc/edit?gid=0#gid=0)**):**
 
 |  |  |
@@ -385,9 +476,9 @@ When an order can't be processed or delivered as planned, Boolanga Customer Supp
 |  |  |  |  |  |
 | :-: | :-: | :-: | :-: | :-: |
 | Shipment error | Cause | Who fixes it | Next step (OMS button) | Status |
-| **Wrong address** | Incorrect city, zip code or street name on the order, or the restaurant can't be found in the area. | Bolt (order data) | Order is cancelled or RTS is requested. Create a new order with the correct address. (Cancel) | Processing/Forwarded |
-| **Insufficient address** | House or apartment number missing, or no instructions for an address inside a large building or shopping mall. | Bolt (order data) | Cancel the order and create a new one with the complete address. (Cancel) | Processing/Forwarded |
-| **Incorrect receiver details** | Incorrect phone number, or the shop name is different from the one on the order. | Bolt (order data) | Cancel the order and create a new one with the correct data. (Cancel) | Processing/Forwarded/Sent |
+| **Wrong address** | Incorrect city, zip code or street name on the order, or the restaurant can't be found in the area. | Bolt (order data) | Cancel the order and create a new one with the correct data or provide correct details as requested by CS. (Cancel)/(Comment) | Processing/Forwarded |
+| **Insufficient address** | House or apartment number missing, or no instructions for an address inside a large building or shopping mall. | Bolt (order data) | Cancel the order and create a new one with the correct data or provide correct details as requested by CS. (Cancel)/(Comment) | Processing/Forwarded |
+| **Incorrect receiver details** | Incorrect phone number, or the shop name is different from the one on the order. | Bolt (order data) | Cancel the order and create a new one with the correct data or provide correct details as requested by CS. (Cancel)/(Comment) | Processing/Forwarded/Sent |
 | **Redirection** | The address was incorrect and the parcel was redirected to another address. If the new address is in another city, delivery can take up to one more week. | Bolt (order data) | RTS is requested. Create a new order with the correct data. (Comment) | Processing/Forwarded/Sent |
 | **Recipient not available** | The restaurant was closed, nobody at the location knew about the package, or the recipient didn't answer the courier's call. | Bolt (merchant) | Sales person is notified. Contact the merchant so someone is there for the next attempt. (Comment) | Processing/Forwarded/Sent |
 | **Refused** | The recipient didn't accept the delivery. | Bolt (merchant) | Parcel is returned to the warehouse, no second attempt. Create a new order if it's still needed. (Comment) | Processing/Forwarded/Sent |
@@ -441,7 +532,7 @@ Always confirm a shipment with Boolanga before you send it. We confirm the corre
 4.  **Handed to Courier** → status **Sent / In-Transit**
 5.  **Home Delivery, Attempt 1.** Delivered successfully? Yes → **Order Delivered**. No → Attempt 2. Exceptions: if the merchant refuses the parcel, it is returned to the warehouse with no second attempt; if the address is incorrect, the next attempt is only made after the address has been corrected.
 6.  **Home Delivery, Attempt 2.** Delivered successfully? Yes → **Order Delivered**. No → redirected to a pick-up point.
-7.  **Redirected to Pick-Up Point** → status **Available for Pick-Up** (max. 5 business days). Collected by merchant? Yes → **Collected · Delivered**. No → **Returned to Sender** (RTS → Returned).
+7.  **Redirected to Pick-Up Point** → status **Available for Pick-Up** (max. 5 business days). Collected by a merchant? Yes → **Collected · Delivered**. No → **Returned to Sender** (RTS → Returned).
 
 Standard delivery for Bolt is home delivery. An order only goes to a pick-up location if delivery fails: after 2 unsuccessful delivery attempts, the parcel is redirected to a pick-up location so the merchant can collect it.
 
@@ -490,6 +581,8 @@ Standard delivery for Bolt is home delivery. An order only goes to a pick-up loc
 | **Booked for Pick-up** |   | Relates to return orders. The WH has reached out to the merchant and has booked a pick-up date. |
 | **Failed Pick-up** |   | Relates to return orders. |
 
+  
+
 ### **Device Activation**
 
 Where activation is still needed, the warehouses activate devices following the [Warehouse activation guidelines](https://drive.google.com/drive/folders/18VQn18Jb0uP_PPdZTXAOIs8Q4slMA6n1?usp=drive_link). Bolt can switch activation off per market. Current status per market ([Market tracker_Activation process](https://docs.google.com/spreadsheets/d/1ScxmwLJOiTnFnTjlkLtEdr3AjHIBEgqJ528-1RGDEPE/edit)):
@@ -501,6 +594,8 @@ Where activation is still needed, the warehouses activate devices following the 
 ### **Merchant Communication**
 
 Merchants receive automatic emails about their package, sent in the name of the Bolt Food team to the merchant's contact email on the order. The templates and localised versions are in [Email Comms: Bolt Food Merchants](https://docs.google.com/document/d/1skxnkpPjAiqile1sjjcjXinoQeneT6v9cf1xTHRJWLk/edit?tab=t.0#heading=h.i8exmzpeylhq). The table shows what triggers each email and the order status it belongs to.
+
+  
 
 |  |  |  |  |
 | :-: | :-: | :-: | :-: |
@@ -514,13 +609,11 @@ Merchants receive automatic emails about their package, sent in the name of the 
 | Exchange: Pick-up reminder | Daily until the replacement is collected | Available for Pick-Up | Merchant |
 | Exchange: Faulty device collection details | The pick-up of the faulty device is booked (3rd day after the exchange request) | Booked for Pick-up | Merchant |
 | Exchange: Faulty device collection unsuccessful | The pick-up attempt failed and a new pick-up is booked | Failed Pick-up | Merchant |
-| Return: Book Now (BG, CZ, RO) | The return request is received. The merchant books the courier pick-up through the Book Now button | To be confirmed | Merchant |
-| Return: Book Now reminder (BG, CZ, RO) | The merchant hasn't booked the pick-up yet | To be confirmed | Merchant |
+| Return: Book Now (BG, CZ, RO) | The return request is received. The merchant books the courier pick-up through the Book Now button | Forwarded | Merchant |
+| Return: Book Now reminder (BG, CZ, RO) | The merchant hasn't booked the pick-up yet | Forwarded | Merchant |
 | Return: Collection details (other markets) | The pick-up is booked (3rd day after the offboarding request) | Booked for Pick-up | Merchant |
-| Return: Nova Poshta drop-off (Ukraine) | A return tracking number is created. The merchant drops the device off at the nearest Nova Poshta branch | To be confirmed | Merchant |
-| Return: Collection unsuccessful | The pick-up attempt failed and a new pick-up is booked | Failed Pick-up | Merchant |
-
-  
+| Return: Nova Poshta drop-off (Ukraine) | A return tracking number is created. The merchant drops the device off at the nearest Nova Poshta branch | Forwarded | Merchant |
+| Return: Collection unsuccessful | The pick-up attempt failed and a new pick-up is booked | Forwarded | Merchant |
 
 ## **04 · Order Cancellation**
 
@@ -547,12 +640,17 @@ Before outlining the escalation process, it's important to define the Service Le
 | Orders placed before 11:00 AM | Orders placed after 11:00 AM |
 | **3 business days**Within SLA: same day (0-day), 1-day, 2-day, or 3-day delivery. | **4 business days**Within SLA: same day (0-day), 1-day, 2-day, 3-day, or 4-day delivery. |
 
+  
+  
+
 ### **Detailed Instructions on Order Escalation**
 
 |  |  |
 | :-: | :-: |
 | ✓ Valid ticket submissions | ✗ Do not escalate |
 |   - Order has exceeded SLA and is past the expected delivery date (accessible within OMS).&#10;  - Order has been in Processing for over 24 hours, with no errors logged in OMS. |   - Tracking shows Delivered, but OMS/SF not updated for under 6 hours. Such status update delays are considered normal. If you want, you can update the status manually, as described under Manual Status Updates (section 08).&#10;  - Order already escalated by the Boolanga CS team with proper OMS logging.&#10;  - Ticket already submitted for this order: no duplicate tickets.&#10;  - Order within transit SLA.&#10;  - General questions related to cancellation or address: please keep these under the order, in OMS. |
+
+  
 
 ### **Ticket Categories**
 
@@ -584,7 +682,7 @@ Before outlining the escalation process, it's important to define the Service Le
 | :-: | :-: |
 | Item | Description |
 | [Submit Ticket](https://forms.zohopublic.eu/boolanga/form/BoltFoodBoolangaSupport/formperma/-2JW6qirerPsLZhUgeZjUKFKwubfNeBfeGp1pa9yDAo) | Use this link to submit tickets to customer support. Tickets receive an ID and replies are sent via email and channel notifications. For multiple orders, provide the leading Order ID and the remaining ones in the description. General order resolution occurs in SF and OMS; only certain categories can be addressed directly to support. For non-order requests, use "0" for order and case IDs. |
-| [Standard Operating Process](https://docs.google.com/document/d/10N80tOCp7AWXPy1854v2t4RgLcGC1d2DjsE3CDH1NC8/edit?tab=t.vi28wkbajzhw) | Main guide for the Bolt Food–Boolanga device distribution cooperation. Contains procedures, guidance, and links to useful documents. Continuously updated. |
+| [Standard Operating Process](about:blank) | Main guide for the Bolt Food–Boolanga device distribution cooperation. Contains procedures, guidance, and links to useful documents. Continuously updated. |
 | [Inbounding](https://docs.google.com/spreadsheets/d/16DB060LN6C2h3vZrYAWBSMz1QSrwcACZa5RbO97AjJM/edit?gid=1128162749#gid=1128162749) | If you're planning any shipment to the warehouse, please add it to the inbounding sheet at least 2 business days ahead. If you don't have an exact ETA, please still notify us. Please check and follow the rules on the "Inbounding Rules" and "User Manual" pages. Please tag barbara@boolanga.com when you've finished adding a shipment so the Boolanga Ops team is notified as well. |
 | [Boolanga Requests Collection Sheet](https://docs.google.com/spreadsheets/d/1rSiniRDcR92m_cNV2W9JSkbDNNz3z65JpvQkIkER7Aw/edit?gid=1603281029#gid=1603281029) | Main sheet for tracking Boolanga to Bolt requests from the Slack workflow. If Boolanga raises a ticket via Slack, reply in the thread. |
 
@@ -642,11 +740,21 @@ The Order Management System (OMS) provides comprehensive metrics to monitor and 
 2.  **Account Support:** if you don't have an account, please raise a ticket for it with Customer Support. If you experience issues with access, or forget your password, please raise a ticket with Customer Support.
 3.  **Familiarizing Yourself with OMS:** explore the [dashboard](https://restaurant.boltoms.wearyourbrand.co/admin/dashboard) to get comfortable with the available metrics and tools.
 
+  
+  
+  
+  
+  
+
 ### **Delivery Metrics**
 
 The Delivery Metrics dashboard provides an overview of the delivery performance for the selected period.
 
+  
+
 **Section 1: High Level Overview KPI Cards**
+
+  
 
 |  |  |
 | :-: | :-: |
@@ -660,11 +768,19 @@ The Delivery Metrics dashboard provides an overview of the delivery performance 
 | **% of SLA Compliance** | The percentage of delivered orders that meet the defined SLA based on submission time:  - Orders submitted before 11:00 AM: SLA is 3 business days from order submission.&#10;  - Orders submitted after 11:00 AM: SLA is 4 business days from order submission.&#10;  - Dispatch day: the dispatch day is considered day 0 and is not counted as the first business day.&#10;  - Exclusions: orders logged with shipment errors are excluded from the calculation.Calculation: this metric reflects how effectively orders are delivered within the agreed service timeframe. |
 | **Shipment Errors Percentage** | The percentage of delivered orders that experienced at least one delivery issue, compared to all delivered orders.  - Counted per order, regardless of how many delivery issues an order may have.&#10;  - Includes only orders placed in the selected market and within the selected period.This metric highlights the proportion of orders affected by delivery problems within the reporting period. |
 
+  
+
 **Section 2: Delivery Metrics**
+
+  
 
 In this section, you can find a selection of charts that provide a clear and transparent picture of delivery and fulfillment performance. The charts are interactive.
 
+  
+
 **1. Order Submission to Dispatch (Excluding and Including Shipment Errors)**
+
+  
 
 This graph shows the number of orders delivered in the selected market and period, and the number of business days between order creation and dispatch (defined as the date when the tracking number is registered in the system). Only orders without shipment errors prior to receiving a tracking number are included.
 
@@ -882,9 +998,17 @@ This section defines the end-to-end process for procuring Restaurant Supplies us
 2.  Order Placement by Bolt merchants directly or by Bolt team members on behalf of merchants.
 3.  Monthly Financial Settlement across e-shop sales revenue and fulfillment costs.
 
+  
+  
+  
+  
+  
+
 ### **2. Discount Code Policy & Roles**
 
 Boolanga generates two distinct categories of discount codes depending on the use case:
+
+  
 
 |  |  |  |  |
 | :-: | :-: | :-: | :-: |
@@ -892,7 +1016,11 @@ Boolanga generates two distinct categories of discount codes depending on the us
 | **External Discount Code** | Boolanga CS / Ops | Shared directly with Bolt merchants | Merchant self-service order placement with tailored commercial discounts. |
 | **Internal Discount Code** | Boolanga CS / Ops | Used by Bolt internal team members | Assisted order placement when Bolt staff order supplies on behalf of a merchant. |
 
+  
+
 **Role Breakdown**
+
+  
 
 |  |  |  |
 | :-: | :-: | :-: |
@@ -1006,6 +1134,7 @@ This SOP is a live document. Every change is recorded here, newest first. When y
 |  |  |  |  |  |
 | :-: | :-: | :-: | :-: | :-: |
 | Date | Section | Change | Changed by | Reference |
+| 19.11.2026 | 01 · Intro | Linked the Asset Delivery Help Desk: answers questions from this SOP, points to the right contact, and gives new team members an overview of what Boolanga does for Bolt. | Hilda Szasz (Boolanga) | [Asset Delivery Help Desk](https://claude.ai/artifact/F88k6dh4QghN4fPwVBr31r) |
 | 19.11.2026 | 02 · Order Submission, 03 · Order Flow | Reorganised section 02: all Ukraine rules are now in one "Ukraine Exceptions" part at the end of the section (delivery and address, field validations, returns, inbound shipments). SKU table reduced to the Sunmi V3 SKU per market. "Remarks" renamed to "Before You Submit". Section 03: removed a repeated intro, courier table sorted by market name. | Hilda Szasz (Boolanga) |   |
 | 19.11.2026 | 01 · Intro | Added three Key Documents: the SKU list, the warehouse activation guidelines and Email Comms: Bolt Food Merchants. | Hilda Szasz (Boolanga) |   |
 | 19.11.2026 | 03 · Order Flow | Added "Merchant Communication": the automatic emails sent to merchants, what triggers them, the order status and who receives them. Some statuses are still to be confirmed. | Hilda Szasz (Boolanga) | [Email Comms: Bolt Food Merchants](https://docs.google.com/document/d/1skxnkpPjAiqile1sjjcjXinoQeneT6v9cf1xTHRJWLk/edit?tab=t.0#heading=h.i8exmzpeylhq) |
@@ -1093,6 +1222,71 @@ const TOOLS = [
 ];
 $("tools").innerHTML = TOOLS.map(([t, d, u]) => `<li><a href="${u}" target="_blank" rel="noopener"><span><span class="t">${esc(t)}</span><span class="d">${esc(d)}</span></span><span class="arr" aria-hidden="true">↗</span></a></li>`).join("");
 
+/* ---------- Markets (from SOP sections 02 and 03) ---------- */
+const MARKETS = {
+  "Bulgaria": { courier: "Sameday", sku: "BG6972253512897", activation: true, returns: "Merchant books the courier pick-up with the Book Now button" },
+  "Czech Republic": { courier: "GLS", sku: "CZ6972253512897(2)", activation: false, returns: "Merchant books the courier pick-up with the Book Now button" },
+  "Estonia": { courier: "SmartPosti", sku: "6972253512897EE", activation: false },
+  "Latvia": { courier: "SmartPosti", sku: "6972253512897(2) LV", activation: false },
+  "Lithuania": { courier: "SmartPosti", sku: "6972253512897(2) LT", activation: false },
+  "Malta": { courier: "Arrow Express", sku: "6972253512897", activation: true },
+  "Poland": { courier: "InPost", sku: "6972253512897", activation: true },
+  "Portugal": { courier: "DPD", sku: "6972253512897", activation: false },
+  "Romania": { courier: "GLS", sku: "RO6972253512897", activation: true, returns: "Merchant books the courier pick-up with the Book Now button" },
+  "Slovakia": { courier: "SPS Slovak Parcel Service", sku: "SK6972253512897(2)", activation: false },
+  "Ukraine": { courier: "Nova Poshta", sku: "6972253512897", activation: true, returns: "Merchant drops the tablet off at the nearest Nova Poshta branch, free of charge",
+    note: "Home delivery only, no branch orders. Cyrillic characters only in name, consignee, address and city. Confirm inbound shipments with Boolanga first." }
+};
+let market = ""; try { market = localStorage.getItem("hd-market") || ""; } catch {}
+if (!MARKETS[market]) market = "";
+$("market").insertAdjacentHTML("beforeend", Object.keys(MARKETS).map(m => `<option>${esc(m)}</option>`).join(""));
+$("market").value = market;
+function renderMarket() {
+  const m = MARKETS[market]; const box = $("marketCard");
+  if (!m) { box.hidden = true; return; }
+  box.hidden = false;
+  box.innerHTML = `<div><span class="k">Courier</span>${esc(m.courier)}</div>
+    <div><span class="k">Sunmi V3 SKU</span>${esc(m.sku)}</div>
+    <div><span class="k">Device activation</span>${m.activation ? "Warehouse still activates devices" : "Activation stopped"}</div>
+    <div><span class="k">Returns</span>${esc(m.returns || "Courier collects the device, pick-up booked on the 3rd day")}</div>
+    ${m.note ? `<div class="wide"><span class="k">Ukraine rules</span>${esc(m.note)}</div>` : ""}`;
+}
+$("market").addEventListener("change", () => { market = $("market").value; try { localStorage.setItem("hd-market", market); } catch {} renderMarket(); });
+renderMarket();
+
+/* ---------- What's new (SOP section 10) ---------- */
+(() => {
+  const i = SOP.search(/##\s+\*{0,2}10\s*·/); const rows = [];
+  if (i >= 0) for (const l of SOP.slice(i).split("\n")) {
+    if (!/^\|/.test(l)) continue;
+    const c = l.replace(/^\||\|$/g, "").split("|").map(x => x.trim());
+    if (/^\d{2}\.\d{2}\.\d{4}$/.test(c[0])) rows.push(c);
+  }
+  $("news").innerHTML = rows.slice(0, 4).map(c => `<li><span class="d">${esc(c[0])} · ${esc(c[1])}</span>${inline(c[2])}</li>`).join("") || `<li class="note">No changes logged yet.</li>`;
+})();
+
+/* ---------- Delivery date check ---------- */
+const isBiz = (d) => d.getDay() !== 0 && d.getDay() !== 6;
+function addBiz(d, n) { const x = new Date(d); while (n > 0) { x.setDate(x.getDate() + 1); if (isBiz(x)) n--; } return x; }
+const fmt = (d) => d.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+function calc() {
+  const dv = $("cDate").value, tv = $("cTime").value || "00:00";
+  if (dv) {
+    const d = new Date(dv + "T12:00");
+    const before = tv < "11:00"; const n = before ? 3 : 4;
+    const due = addBiz(d, n);
+    const today = new Date(); today.setHours(12, 0, 0, 0);
+    const late = today > due;
+    $("cOut").innerHTML = `Within SLA if delivered by <b>${esc(fmt(due))}</b><br><span class="note">${before ? "Placed before 11:00: 3 business days" : "Placed after 11:00: 4 business days"}. The order day is day 0.${late ? " This date has passed: if the order isn't delivered, submit a ticket (Status Update on Delayed Orders)." : ""}</span>`;
+  } else $("cOut").innerHTML = "";
+  const pv = $("pDate").value;
+  if (pv) { const last = addBiz(new Date(pv + "T12:00"), 5);
+    $("pOut").innerHTML = `Merchant must collect by <b>${esc(fmt(last))}</b><br><span class="note">After 5 business days the parcel goes back to the warehouse.</span>`;
+  } else $("pOut").innerHTML = "";
+}
+["cDate", "cTime", "pDate"].forEach(id => $(id).addEventListener("input", calc));
+(() => { const d = new Date(); $("cDate").value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; calc(); })();
+
 const EXAMPLES = ["Which product do I select for a return?", "Who approves a bulk order?", "Order stuck in Processing for over a day", "Cancel an order that's already Sent", "Merchant refused the parcel", "Tracking says delivered but OMS doesn't", "Send tablets to the warehouse", "Ukraine order rules"];
 $("chips").insertAdjacentHTML("beforeend", EXAMPLES.map(e => `<button type="button" class="chip">${esc(e)}</button>`).join(""));
 $("chips").addEventListener("click", (e) => { const b = e.target.closest(".chip"); if (!b) return; $("q").value = b.textContent; ask(); });
@@ -1168,11 +1362,12 @@ function snippet(text, qs) {
   for (const w of qs) { const st = esc(STEM(w)).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); h = h.replace(new RegExp(`(${st}[\\p{L}]*)`, "giu"), "<mark>$1</mark>"); }
   return h;
 }
-function renderExcerpts(q) {
+function renderExcerpts(q, title, collapsed) {
   const hits = search(q);
   $("excerpts").hidden = !hits.length;
+  $("excerptTitle").textContent = title || "Related SOP sections";
   $("excerptList").innerHTML = hits.map((h, k) => `
-    <details class="sec"${k === 0 && !sample && h.text.length < 4000 ? " open" : ""}>
+    <details class="sec"${k === 0 && !collapsed && h.text.length < 4000 ? " open" : ""}>
       <summary><span class="num">${esc(h.num)}</span><span>${esc(h.title === h.parent ? h.title : h.parent + " · " + h.title)}</span></summary>
       <div class="snippet">${snippet(h.text, h.qs)}</div>
       <div class="body md">${md(h.text)}</div>
@@ -1187,122 +1382,202 @@ function contactCard(key, topic, extra) {
 }
 
 /* ---------- Claude + db wiring ---------- */
-let sample = null, db = null, user = null, uid = null, ctl = null, lastQ = "", lastAnswer = null;
-(async () => {
-  if (!window.claude?.use) return;
-  [sample, db, user] = await Promise.all([claude.use("sample"), claude.use("db"), claude.use("user")]);
-  if (!sample) $("modeHint").textContent = "Showing matching SOP sections. Sign in to Claude to get written answers.";
+const TOPIC_LIST = ["Order submission and data", "Address and delivery", "Order status and tracking", "Shipment errors", "Cancellation", "Exchanges and returns", "Stock and inbounding", "Devices and activation", "Products and SKUs", "OMS access and technical", "Merchant communication", "Ukraine", "Pricing and invoicing", "Other"];
+let sample = null, db = null, user = null, uid = null, canLog = false, ctl = null, lastQ = "", lastAnswer = null;
+const hasClaude = !!window.claude?.use;
+const sampleReady = (hasClaude ? claude.use("sample").catch(() => null) : Promise.resolve(null)).then(s => {
+  sample = s;
+  if (!s) $("modeHint").textContent = "Written answers need you to be signed in to Claude. You'll see the matching SOP sections instead.";
+  return s;
+});
+const dbReady = (async () => {
+  if (!hasClaude) return;
+  [db, user] = await Promise.all([claude.use("db").catch(() => null), claude.use("user").catch(() => null)]);
   if (user) { try { uid = await user.id(); } catch { uid = null; } }
+  if (db && uid) { try { canLog = (await user.can("data.write")) !== false; } catch { canLog = true; } }
   let admin = false; try { admin = !!(user && await user.canEdit()); } catch {}
   if (admin && db) startOwnerPanel();
 })();
 
 function buildPrompt(q) {
   const contacts = Object.entries(CONTACTS).filter(([, v]) => v).map(([k, v]) => `- ${k}: ${v.name}. Use for: ${v.when}`).join("\n");
-  return `You are the help desk for Bolt Food team members who order onboarding devices (tablets, gear) through Boolanga. Answer ONLY from the SOP below. If the SOP does not cover the question, say so and do not guess.
+  return `You are the Asset Delivery Help Desk for Bolt Food team members who order onboarding devices and items through Boolanga. Your knowledge is the SOP below and nothing else.
 
-Rules:
-- Reply in the language the question is written in.
-- Be direct and practical. Write for a busy local ops person.
-- Pick the single best contact from the list. Use "none" only if the SOP answer fully solves it and nobody needs to be contacted.
-- If the best contact is "ticket", also pick the ticket topic from: ${TOPICS.join("; ")}.
-- Never invent links, names, emails or deadlines that are not in the SOP.
-- Never send the user to #boolanga-bolt-global-ops. That channel is only for the central Bolt and Boolanga team, not for local team members.
+How to answer:
+1. Read the whole SOP, not just the first section that matches. Most questions touch several sections (for example order data, shipment errors, the order flow, timelines and Ukraine exceptions). Connect them.
+2. Work out what the person actually needs to do, then answer it in plain words. Explain the why when it helps (the rule, the timeline, who is responsible).
+3. Check for exceptions that change the answer: Ukraine rules, market-specific couriers or activation, return vs exchange, bulk orders over 20 pieces.
+4. Decide coverage honestly:
+   - "covered": the SOP fully answers it.
+   - "partial": the SOP answers part of it; say clearly which part is missing.
+   - "not_covered": the SOP does not answer it. Do not guess or use general knowledge. Say it isn't in the SOP and send them to the right contact.
+5. Pick the single best contact from the list below. Use "none" only if the answer fully solves it. If you pick "ticket", also pick the ticket topic.
+6. Never invent links, names, emails, deadlines or numbers that are not in the SOP. Never send anyone to #boolanga-bolt-global-ops (central team only).
+7. Reply in the language of the question. Write for a busy local ops person: direct, no filler, no em dashes.
 
 Contacts:
 ${contacts}
 
-Reply with ONLY one JSON object, no other text:
-{"covered": true|false, "summary": "1-3 sentence answer", "steps": ["short step", "..."], "section": "SOP section number and name, e.g. 03 · Order Flow", "contact": "one contact key", "ticket_topic": "topic or empty string", "include": "what to put in the message or ticket, or empty string"}
+Ticket topics: ${TOPICS.join("; ")}
+Topic categories (pick one for "topic"): ${TOPIC_LIST.join("; ")}
+
+Reply with ONLY one JSON object:
+{"coverage": "covered" | "partial" | "not_covered",
+ "answer": "2-5 sentences that directly answer the question, connecting the relevant SOP rules",
+ "steps": ["what to do, in order, short imperative steps (0-6)"],
+ "missing": "if partial or not_covered: what the SOP doesn't say, else empty string",
+ "sources": ["SOP sections used, e.g. 02 · Order Submission > Shipment Errors"],
+ "topic": "one topic category",
+ "contact": "one contact key",
+ "ticket_topic": "ticket topic or empty string",
+ "include": "what to put in the ticket or message (order ID, market, etc.), or empty string"}
 
 SOP:
 """
 ${SOP}
 """
 
-Question or issue from a Bolt team member:
+${market ? `The person works in ${market}. Tailor the answer to ${market}: its courier, SKU, activation status and return method. Apply the Ukraine exceptions only if the market is Ukraine.\n\n` : "The person hasn't picked a market. If the answer depends on the market, say how it differs.\n\n"}Question or issue from a Bolt team member:
 """
 ${q}
 """`;
 }
 
+const ERR = {
+  not_granted: "Written answers are switched off for this page in your Claude settings. The matching SOP sections are below.",
+  sampling_disabled: "Written answers aren't available for your Claude account. The matching SOP sections are below.",
+  capability_disabled: "Written answers aren't available in this view. The matching SOP sections are below.",
+  capability_removed: "Your Claude app needs an update for written answers. The matching SOP sections are below.",
+  rate_limited: "Too many questions in a short time. Wait a minute and try again.",
+  session_expired: "Your Claude session expired. Sign in again and retry.",
+  invalid_json: "The answer came back in the wrong format. Try again.",
+  refused: "That question couldn't be answered. Try rephrasing it.",
+  prompt_too_large: "The question is too long. Shorten it and try again."
+};
+
 async function ask() {
   const q = $("q").value.trim(); if (!q) { $("q").focus(); return; }
   lastQ = q; lastAnswer = null;
-  renderExcerpts(q);
   const box = $("answer"); box.hidden = false;
-  if (!sample) {
-    box.innerHTML = `<span class="status st-info">From the SOP</span>
-      <p class="summary">Here are the SOP sections that match your question. Open one to read the full text.</p>
-      ${contactCard("oms_comment", "", "Still stuck? For questions about one order, comment on it in OMS. For anything out of SLA, submit a ticket.")}`;
+  box.innerHTML = `<div class="thinking"><span class="dot"></span>Checking the SOP…</div>`;
+  $("excerpts").hidden = true;
+  $("askBtn").disabled = true;
+  const s = (await sampleReady) && sample;
+  if (!s) {
+    $("askBtn").disabled = false;
+    renderExcerpts(q, "Matching SOP sections");
+    box.innerHTML = `<span class="status st-info">Search only</span>
+      <p class="summary">Written answers need you to be signed in to Claude in this browser. Below are the SOP sections that match your question.</p>
+      ${contactCard("ticket", "", "Can't find it? Submit a ticket and Boolanga Customer Support will help.")}
+      ${sendBox(q)}`;
+    wireCopy();
     return;
   }
   ctl?.abort(); ctl = new AbortController();
-  $("askBtn").disabled = true; $("stopBtn").hidden = false;
-  box.innerHTML = `<div class="thinking"><span class="dot"></span>Checking the SOP…</div>`;
+  $("stopBtn").hidden = false;
   try {
-    const a = await sample.json(buildPrompt(q), { signal: ctl.signal, modelTier: "default", effort: "low" });
-    lastAnswer = a; renderAnswer(a);
-    if (a && a.covered === false) logGap(q, "not_covered", a.section);
+    const a = await s.json(buildPrompt(q), { signal: ctl.signal, modelTier: "default" });
+    lastAnswer = normalise(a);
+    await Promise.race([dbReady, new Promise(r => setTimeout(r, 3000))]);
+    renderAnswer(lastAnswer);
+    renderExcerpts(q, "Read it in the SOP", true);
+    logAsk(lastAnswer);
+    if (lastAnswer.coverage !== "covered") logGap(q, lastAnswer.coverage, lastAnswer);
   } catch (e) {
-    const msg = {
-      cancelled: "Stopped.",
-      not_granted: "Written answers are turned off for this page. The matching SOP sections are below.",
-      sampling_disabled: "Written answers aren't available for your account. The matching SOP sections are below.",
-      rate_limited: "Too many questions in a short time. Wait a minute and try again.",
-      session_expired: "Your Claude session expired. Sign in again and retry.",
-      invalid_json: "The answer came back in the wrong format. Try again, or rephrase the question.",
-      refused: "That question couldn't be answered. Try rephrasing it."
-    }[e?.code] || "Something went wrong getting an answer. Try again in a moment. The matching SOP sections are below.";
-    if (e?.code === "not_granted" || e?.code === "sampling_disabled") { sample = null; $("modeHint").textContent = "Showing matching SOP sections."; }
-    box.innerHTML = `<p class="summary">${esc(msg)}</p>`;
+    if (e?.code === "cancelled") { box.innerHTML = `<p class="summary">Stopped.</p>`; return; }
+    if (["not_granted", "sampling_disabled", "capability_disabled", "capability_removed", "not_declared"].includes(e?.code)) { sample = null; }
+    renderExcerpts(q, "Matching SOP sections");
+    box.innerHTML = `<p class="summary">${esc(ERR[e?.code] || "Something went wrong getting an answer. Try again in a moment. The matching SOP sections are below.")}</p>
+      <p class="note">Error code: ${esc(e?.code || "unknown")}</p>`;
   } finally { $("askBtn").disabled = false; $("stopBtn").hidden = true; }
 }
 
-function renderAnswer(a) {
-  const covered = a?.covered !== false;
-  const steps = Array.isArray(a?.steps) ? a.steps.filter(Boolean).slice(0, 8) : [];
-  const key = CONTACTS[a?.contact] ? a.contact : (covered ? "none" : "ticket");
-  const ticketText = (key === "ticket" || !covered) ? `Topic: ${a?.ticket_topic || "Operational / Technical Issues"}\nIssue: ${lastQ}${a?.include ? "\nDetails to add: " + a.include : ""}` : "";
-  $("answer").innerHTML = `
-    <span class="status ${covered ? "st-ok" : "st-warn"}">${covered ? "Answered from the SOP" : "Not covered in the SOP"}</span>
-    <p class="summary">${esc(a?.summary || "")}</p>
-    ${steps.length ? `<ol class="steps">${steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>` : ""}
-    ${a?.section ? `<div class="meta">Source: SOP ${esc(a.section)}</div>` : ""}
-    ${contactCard(key, key === "ticket" ? a?.ticket_topic : "", a?.include ? "Include: " + a.include : "")}
-    ${ticketText ? `<div class="copybox" id="ticketText">${esc(ticketText)}</div>
-      <div class="row" style="margin-top:8px"><button type="button" class="btn-ghost" id="copyBtn">Copy ticket text</button><span class="note" id="copyNote"></span></div>` : ""}
-    <div class="feedback" id="fb">${covered ? `<div class="row"><span class="note">Did this solve it?</span>
-      <button type="button" class="btn-ghost" data-fb="yes">Yes</button><button type="button" class="btn-ghost" data-fb="no">No</button></div>` :
-      `<span class="note">${db && uid ? "Your question was saved so the SOP can be updated." : ""}</span>`}</div>`;
+function normalise(a) {
+  const cov = ["covered", "partial", "not_covered"].includes(a?.coverage) ? a.coverage : (a?.covered === false ? "not_covered" : "covered");
+  return {
+    coverage: cov,
+    answer: String(a?.answer || a?.summary || ""),
+    steps: Array.isArray(a?.steps) ? a.steps.filter(Boolean).map(String).slice(0, 8) : [],
+    missing: String(a?.missing || ""),
+    sources: Array.isArray(a?.sources) ? a.sources.filter(Boolean).map(String).slice(0, 5) : (a?.section ? [String(a.section)] : []),
+    topic: TOPIC_LIST.includes(a?.topic) ? a.topic : "Other",
+    contact: CONTACTS[a?.contact] ? a.contact : (cov === "covered" ? "none" : "ticket"),
+    ticket_topic: String(a?.ticket_topic || ""),
+    include: String(a?.include || "")
+  };
+}
+
+function sendBox(q, a) {
+  const text = `Topic: ${a?.ticket_topic || "Operational / Technical Issues"}\nQuestion: ${q}${a?.include ? "\nDetails: " + a.include : ""}`;
+  return `<div class="copybox" id="ticketText">${esc(text)}</div>
+    <div class="row" style="margin-top:8px"><button type="button" class="btn-ghost" id="copyBtn">Copy ticket text</button><span class="note" id="copyNote"></span></div>`;
+}
+function wireCopy() {
   $("copyBtn")?.addEventListener("click", async () => {
     try { await navigator.clipboard.writeText($("ticketText").textContent); $("copyNote").textContent = "Copied"; }
     catch { const r = document.createRange(); r.selectNodeContents($("ticketText")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $("copyNote").textContent = "Selected. Press Ctrl+C / ⌘C."; }
   });
+}
+
+function renderAnswer(a) {
+  const label = { covered: ["st-ok", "Answered from the SOP"], partial: ["st-warn", "Partly covered in the SOP"], not_covered: ["st-warn", "Not covered in the SOP"] }[a.coverage];
+  const needHelp = a.coverage !== "covered" || a.contact !== "none";
+  const saved = a.coverage !== "covered" && canLog;
+  $("answer").innerHTML = `
+    <span class="status ${label[0]}">${label[1]}</span>
+    ${a.answer ? `<p class="summary">${esc(a.answer)}</p>` : ""}
+    ${a.steps.length ? `<h3 class="sub">What to do</h3><ol class="steps">${a.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>` : ""}
+    ${a.missing ? `<p class="missing"><strong>Not in the SOP:</strong> ${esc(a.missing)}</p>` : ""}
+    ${a.sources.length ? `<div class="meta">Based on: ${a.sources.map(esc).join(" · ")}</div>` : ""}
+    ${needHelp ? contactCard(a.contact === "none" ? "ticket" : a.contact, a.contact === "ticket" ? a.ticket_topic : "", a.include ? "Include: " + a.include : "") : ""}
+    ${a.coverage !== "covered" || a.contact === "ticket" ? sendBox(lastQ, a) : ""}
+    <div class="feedback" id="fb">${a.coverage === "covered" ? `<div class="row"><span class="note">Did this solve it?</span>
+      <button type="button" class="btn-ghost" data-fb="yes">Yes</button><button type="button" class="btn-ghost" data-fb="no">No</button></div>` :
+      `<span class="note">${saved ? "Your question was saved so Boolanga can add it to the SOP." : "If this keeps coming up, send it to Boolanga with the ticket form so it can be added to the SOP."}</span>`}</div>`;
+  wireCopy();
   $("fb")?.addEventListener("click", (e) => {
     const b = e.target.closest("[data-fb]"); if (!b) return;
     if (b.dataset.fb === "no") {
-      logGap(lastQ, "not_helpful", lastAnswer?.section);
-      $("fb").innerHTML = `<p class="note" style="margin:0 0 4px">Thanks. ${db && uid ? "Your question was saved for review. " : ""}Here's where to get help:</p>` +
-        contactCard(lastAnswer?.contact === "none" || !CONTACTS[lastAnswer?.contact] ? "ticket" : lastAnswer.contact, lastAnswer?.ticket_topic || "", "");
+      logGap(lastQ, "not_helpful", lastAnswer);
+      $("fb").innerHTML = `<p class="note" style="margin:0 0 4px">Thanks. ${canLog ? "Your question was saved for review. " : ""}Here's where to get help:</p>` +
+        contactCard(lastAnswer?.contact === "none" ? "ticket" : lastAnswer.contact, lastAnswer?.ticket_topic || "", "") + sendBox(lastQ, lastAnswer);
+      wireCopy();
     } else { $("fb").innerHTML = `<p class="note" style="margin:0">Good to hear.</p>`; }
   });
 }
 
 /* ---------- Gap log ---------- */
 let writing = Promise.resolve();
-function logGap(q, reason, section) {
-  if (!db || !uid) return;
+function logGap(q, reason, a) {
   writing = writing.then(async () => {
+    await dbReady;
+    if (!db || !uid || !canLog) return;
     try {
       const ref = db.doc("gaps/" + uid);
       const snap = await ref.get();
-      const entries = (snap.exists && Array.isArray(snap.data().entries)) ? snap.data().entries.slice(-99) : [];
-      entries.push({ q: q.slice(0, 1000), reason, section: String(section || "").slice(0, 80), at: new Date().toISOString() });
+      const entries = (snap.exists && Array.isArray(snap.data().entries)) ? snap.data().entries.slice(-199) : [];
+      entries.push({ q: q.slice(0, 1000), reason, topic: a?.topic || "Other", market, missing: String(a?.missing || "").slice(0, 300),
+        section: String((a?.sources || [])[0] || "").slice(0, 120), at: new Date().toISOString() });
       await ref.set({ entries });
     } catch { /* best-effort */ }
   });
 }
+
+let asking = Promise.resolve();
+function logAsk(a) {
+  asking = asking.then(async () => {
+    await dbReady;
+    if (!db || !uid || !canLog) return;
+    try {
+      const ref = db.doc("asks/" + uid); const snap = await ref.get();
+      const log = (snap.exists && Array.isArray(snap.data().log)) ? snap.data().log.slice(-499) : [];
+      log.push({ at: new Date().toISOString(), coverage: a.coverage, topic: a.topic, market });
+      await ref.set({ log });
+    } catch {}
+  });
+}
+let ASKS = [];
+let GAPS = [], NAMES = {}, filterTopic = "", filterDays = 0;
 function startOwnerPanel() {
   $("owner").hidden = false;
   let loaded = false;
@@ -1310,23 +1585,68 @@ function startOwnerPanel() {
   db.collection("gaps").onSnapshot(async (snap) => {
     loaded = true; clearTimeout(timer);
     const all = [];
-    for (const d of snap.docs) { const ents = d.data()?.entries; if (Array.isArray(ents)) ents.forEach(e => all.push({ ...e, who: d.id })); }
+    for (const d of snap.docs) { const ents = d.data()?.entries; if (Array.isArray(ents)) ents.forEach(e => all.push({ ...e, topic: e.topic || "Other", who: d.id })); }
     all.sort((a, b) => String(b.at).localeCompare(String(a.at)));
-    $("gapCount").textContent = all.length ? `(${all.length})` : "";
-    if (!all.length) { $("gapList").innerHTML = `<p class="note">No saved questions yet. Questions the SOP can't answer will show up here.</p>`; return; }
-    let names = {}; try { names = await user.profiles([...new Set(all.map(a => a.who))]); } catch {}
-    $("gapList").innerHTML = all.slice(0, 60).map(g => `<div class="gap"><div class="q">${esc(g.q)}</div>
-      <div class="m"><span>${esc(names[g.who]?.name || "Someone")}</span><span>${esc(new Date(g.at).toLocaleDateString())}</span>
-      <span>${g.reason === "not_covered" ? "Not in SOP" : "Marked not helpful"}</span>
-      <button type="button" class="linkbtn" data-who="${esc(g.who)}" data-at="${esc(g.at)}">Mark reviewed</button></div></div>`).join("");
+    GAPS = all;
+    try { NAMES = await user.profiles([...new Set(all.map(a => a.who))]); } catch { NAMES = {}; }
+    renderOwner();
   }, () => { loaded = true; clearTimeout(timer); $("gapList").innerHTML = `<p class="note">Saved questions can't be loaded.</p>`; });
-  $("gapList").addEventListener("click", async (e) => {
+  db.collection("asks").onSnapshot((snap) => {
+    const all = []; for (const d of snap.docs) { const l = d.data()?.log; if (Array.isArray(l)) l.forEach(x => all.push(x)); }
+    ASKS = all; renderOwner();
+  }, () => {});
+  $("owner").addEventListener("click", async (e) => {
+    const t = e.target.closest("[data-topic]");
+    if (t) { filterTopic = filterTopic === t.dataset.topic ? "" : t.dataset.topic; renderOwner(); return; }
+    const p = e.target.closest("[data-days]");
+    if (p) { filterDays = +p.dataset.days; renderOwner(); return; }
+    if (e.target.closest("#exportBtn")) { exportCsv(); return; }
     const b = e.target.closest("[data-who]"); if (!b) return; b.disabled = true;
     try {
       const ref = db.doc("gaps/" + b.dataset.who); const s = await ref.get();
       await ref.set({ entries: (s.data()?.entries || []).filter(x => x.at !== b.dataset.at) });
     } catch { b.disabled = false; }
   });
+}
+function inPeriod(g) { return !filterDays || (Date.now() - new Date(g.at).getTime()) <= filterDays * 864e5; }
+function renderOwner() {
+  const period = GAPS.filter(inPeriod);
+  $("gapCount").textContent = GAPS.length ? `(${GAPS.length})` : "";
+  $("periodSel").innerHTML = [[0, "All time"], [30, "Last 30 days"], [7, "Last 7 days"]].map(([d, l]) =>
+    `<button type="button" class="pill${filterDays === d ? " on" : ""}" data-days="${d}">${l}</button>`).join("");
+  const asks = ASKS.filter(inPeriod);
+  const cov = asks.length ? Math.round(asks.filter(x => x.coverage === "covered").length / asks.length * 100) : null;
+  const covHtml = `<div class="kpis" style="margin-bottom:10px"><div><b>${asks.length}</b><span>questions asked</span></div><div><b>${cov === null ? "–" : cov + "%"}</b><span>fully answered by the SOP</span></div>
+    <div><b>${asks.filter(x => x.coverage === "partial").length}</b><span>partly covered</span></div><div><b>${asks.filter(x => x.coverage === "not_covered").length}</b><span>not in the SOP</span></div></div>`;
+  if (!GAPS.length) {
+    $("gapStats").innerHTML = covHtml;
+    $("gapList").innerHTML = `<p class="note">No saved questions yet. Questions the SOP can't fully answer will show up here, grouped by topic.</p>`;
+    return;
+  }
+  const counts = {}; period.forEach(g => counts[g.topic] = (counts[g.topic] || 0) + 1);
+  const rows = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const max = rows[0]?.[1] || 1;
+  const nc = period.filter(g => g.reason === "not_covered").length, pc = period.filter(g => g.reason === "partial").length, nh = period.filter(g => g.reason === "not_helpful").length;
+  $("gapStats").innerHTML = covHtml + `
+    <p class="note" style="margin:0">To review: ${period.length} saved question${period.length === 1 ? "" : "s"} (${nc} not in SOP, ${pc} partly covered, ${nh} marked not helpful).</p>
+    <h3 class="sub">Topics not covered by the SOP</h3>
+    <div class="bars">${rows.map(([k, v]) => `<button type="button" class="bar${filterTopic === k ? " on" : ""}" data-topic="${esc(k)}">
+      <span class="bl">${esc(k)}</span><span class="bt"><span style="width:${Math.max(4, v / max * 100)}%"></span></span><span class="bv">${v}</span></button>`).join("") || `<p class="note">Nothing in this period.</p>`}</div>`;
+  const list = period.filter(g => !filterTopic || g.topic === filterTopic);
+  $("gapList").innerHTML = `<div class="row" style="justify-content:space-between;margin-bottom:6px"><h3 class="sub" style="margin:0">${filterTopic ? esc(filterTopic) : "All questions"} <span class="note">(${list.length})</span></h3>
+      ${filterTopic ? `<button type="button" class="linkbtn" data-topic="${esc(filterTopic)}">Show all topics</button>` : ""}</div>` +
+    list.slice(0, 100).map(g => `<div class="gap"><div class="q">${esc(g.q)}</div>
+      ${g.missing ? `<div class="miss">Missing: ${esc(g.missing)}</div>` : ""}
+      <div class="m"><span class="tag">${esc(g.topic)}</span>${g.market ? `<span>${esc(g.market)}</span>` : ""}<span>${esc(NAMES[g.who]?.name || "Someone")}</span><span>${esc(new Date(g.at).toLocaleDateString())}</span>
+      <span>${{ not_covered: "Not in SOP", partial: "Partly covered", not_helpful: "Marked not helpful" }[g.reason] || esc(g.reason)}</span>
+      <button type="button" class="linkbtn" data-who="${esc(g.who)}" data-at="${esc(g.at)}">Mark reviewed</button></div></div>`).join("");
+}
+function exportCsv() {
+  const rows = [["Date", "Topic", "Market", "Reason", "Question", "Missing from SOP", "Asked by"]].concat(GAPS.filter(inPeriod).map(g =>
+    [g.at, g.topic, g.market || "", g.reason, g.q, g.missing || "", NAMES[g.who]?.name || ""]));
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+  const box = $("csvOut"); box.hidden = false; box.value = csv; box.select();
+  try { navigator.clipboard.writeText(csv); $("csvNote").textContent = "Copied. Paste it into a sheet."; } catch { $("csvNote").textContent = "Select all and copy."; }
 }
 
 $("askForm").addEventListener("submit", (e) => { e.preventDefault(); ask(); });
